@@ -12,7 +12,7 @@ endless shooter, which include the following elements:
 chests)
 - experience (from defeating enemies, increases basic 
 stats)
-- different items
+- different items (can be stored or removed from inventory)
 - shop (to buy/upgrade items)
 - scaling (the longer you play, the harder the game 
 gets)
@@ -29,6 +29,15 @@ played video games, and never had the chance to make one.
 This project is the perfect opportunity to give it a go. 
 I'm hoping that the project turns out to be fun, so anyone
 can enjoy it.
+
+## User Stories
+
+ - As a user, I want to be able to add/remove an item to my inventory
+ - As a user, I want to be able to view my inventory
+ - As a user, I want to be able to aim and shoot in different 
+directions
+ - As a user, I want to be able to view the amount of money I have
+
 
 
 
