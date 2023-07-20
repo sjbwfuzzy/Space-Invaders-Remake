@@ -36,7 +36,11 @@ can enjoy it.
  - As a user, I want to be able to view my inventory
  - As a user, I want to be able to aim and shoot in different 
 directions
- - As a user, I want to be able to view the amount of money I have
+ - As a user, I want to be able to view my current stats (attack, health, etc)
+ - As a user, I want to be able to change my stats by equipping items and defeating enemies
+ - As a user, I want the difficulty of the game to increase along with my current level
+ - As a user, I want to be able to buy and upgrade my items using the shop
+ - As a user, I want to be able to fight different enemies
 
 
 
