@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // a bullet, having damage, speed, penetration, radius, mybullet
-public class Bullet {
+public class Bullet implements Writable {
     private int damage;
     private int speed;
     private int penetration;
@@ -35,5 +38,16 @@ public class Bullet {
 
     public boolean isMybullet() {
         return mybullet;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("damage", damage);
+        json.put("speed", speed);
+        json.put("penetration", penetration);
+        json.put("radius", radius);
+        json.put("mybullet", mybullet);
+        return json;
     }
 }

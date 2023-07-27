@@ -1,0 +1,33 @@
+{
+  "stats": [
+    11,
+    3,
+    13,
+    104
+  ],
+  "level": 1,
+  "experience": 0,
+  "inventory": {
+    "money": 150,
+    "buffs": [{
+      "name": "buff1",
+      "modifiers": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }],
+    "weapons": [{
+      "fireRate": 15,
+      "bulletType": {
+        "damage": 1,
+        "penetration": 1,
+        "radius": 1,
+        "speed": 1,
+        "mybullet": true
+      },
+      "name": "weapon1"
+    }]
+  }
+}

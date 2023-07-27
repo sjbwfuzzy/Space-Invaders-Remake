@@ -1,0 +1,15 @@
+{
+  "stats": [
+    10,
+    1,
+    10,
+    100
+  ],
+  "level": 1,
+  "experience": 0,
+  "inventory": {
+    "money": 0,
+    "buffs": [],
+    "weapons": []
+  }
+}

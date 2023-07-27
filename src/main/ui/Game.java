@@ -1,9 +1,12 @@
 package ui;
 
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -11,16 +14,35 @@ import java.util.Scanner;
 
 // Game application
 public class Game {
+    private static final String JSON_STORE = "./data/game.json";
     private Player player;
     private Inventory inventory;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: initializes the game
     public Game() {
-        player = new Player();
+        ArrayList<Integer> stats = new ArrayList<>(4);
+        stats.add(10); //max health
+        stats.add(1); //bonus attack
+        stats.add(10); //speed
+        stats.add(100); //fire rate (percentage)
+
+        int experience = 0;
+        int level = 1;
+
+        int money = 0;
+        ArrayList<Weapon> weapons = new ArrayList<>();
+        ArrayList<Buff> buffs = new ArrayList<>();
+
+        player = new Player(stats, experience, level, new Inventory(money, weapons, buffs));
         inventory = player.getInventory();
+
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runGame();
     }
 
@@ -34,7 +56,7 @@ public class Game {
             printInfo();
             choice = input.nextInt();
 
-            if (choice == 9) {
+            if (choice == 11) {
                 keepGoing = false;
             } else {
                 processInput(choice);
@@ -54,7 +76,9 @@ public class Game {
         System.out.println("6: remove weapon");
         System.out.println("7: add buff");
         System.out.println("8: remove buff");
-        System.out.println("9: quit\n");
+        System.out.println("9: save game");
+        System.out.println("10: load game");
+        System.out.println("11: quit\n");
     }
 
     // MODIFIES: this
@@ -76,6 +100,10 @@ public class Game {
             addBuff();
         } else if (choice == 8) {
             removeBuff();
+        } else if (choice == 9) {
+            saveGame();
+        } else if (choice == 10) {
+            loadGame();
         } else {
             System.out.println("Not a valid option!");
         }
@@ -93,6 +121,18 @@ public class Game {
         System.out.println("Buffs: ");
         for (Buff buff : inventory.getBuffs()) {
             System.out.println("Buff Name: " + buff.getName());
+            ArrayList<Integer> modifiers = buff.getModifiers();
+            for (int index = 0; index < modifiers.size(); index++) {
+                if (index == 0) {
+                    System.out.println("\tHealth modifier: " + modifiers.get(index));
+                } else if (index == 1) {
+                    System.out.println("\tAttack modifier: " + modifiers.get(index));
+                } else if (index == 2) {
+                    System.out.println("\tSpeed modifier: " + modifiers.get(index));
+                } else if (index == 3) {
+                    System.out.println("\tFire Rate modifier: " + modifiers.get(index));
+                }
+            }
         }
     }
 
@@ -193,6 +233,30 @@ public class Game {
             return;
         }
         System.out.println("There is no such buff!");
+    }
+
+    // EFFECTS: saves the game to file
+    private void saveGame() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(player);
+            jsonWriter.close();
+            System.out.println("Saved game to: " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads game from file
+    private void loadGame() {
+        try {
+            player = jsonReader.read();
+            inventory = player.getInventory();
+            System.out.println("Loaded game from: " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }
 

@@ -11,8 +11,24 @@ class PlayerTest {
     private Player testPlayer;
 
     @BeforeEach
+
     void runBefore() {
-        testPlayer = new Player();
+
+        ArrayList<Integer> stats = new ArrayList<>(4);
+        stats.add(10); //max health
+        stats.add(1); //bonus attack
+        stats.add(10); //speed
+        stats.add(100); //fire rate (percentage)
+
+        int experience = 0;
+        int level = 1;
+
+        int money = 0;
+        ArrayList<Weapon> weapons = new ArrayList<>();
+        ArrayList<Buff> buffs = new ArrayList<>();
+
+        Inventory inventory = new Inventory(money, weapons, buffs);
+        testPlayer = new Player(stats, experience, level, inventory);
     }
 
     @Test

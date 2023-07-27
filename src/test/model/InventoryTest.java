@@ -18,7 +18,11 @@ class InventoryTest {
 
     @BeforeEach
     void runBefore() {
-        testInventory = new Inventory();
+        int money = 0;
+        ArrayList<Weapon> weapons = new ArrayList<>();
+        ArrayList<Buff> buffs = new ArrayList<>();
+
+        testInventory = new Inventory(money, weapons, buffs);
         buff1 = new Buff("buff1", new ArrayList<>());
         buff2 = new Buff("buff2", new ArrayList<>());
         b1 = new Bullet(1,2, 3, 4, true);

@@ -1,10 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 // The inventory of a player, having money, list of Weapon, and list of Buff
-public class Inventory {
+public class Inventory implements Writable {
     private static final int MAX_WEAPONS = 3;
     private static final int MAX_BUFFS = 5;
 
@@ -13,10 +17,10 @@ public class Inventory {
     private ArrayList<Buff> buffs;
 
     // EFFECTS: creates the default inventory
-    public Inventory() {
-        money = 0;
-        weapons = new ArrayList<>();
-        buffs = new ArrayList<>();
+    public Inventory(int m, ArrayList<Weapon> w, ArrayList<Buff> b) {
+        money = m;
+        weapons = w;
+        buffs = b;
     }
 
     // MODIFIES: this
@@ -98,5 +102,32 @@ public class Inventory {
         // this should never be reached, as the game should always check that containsBuff(name) is true before
         // attempting to call getBuff(name).
         return new Buff("Something went wrong", new ArrayList<>());
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("money", money);
+        json.put("weapons", weaponsToJson());
+        json.put("buffs", buffsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns buffs as a JSON array
+    private JSONArray buffsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Buff buff : buffs) {
+            jsonArray.put(buff.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns weapons as a JSON array
+    private JSONArray weaponsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Weapon weapon : weapons) {
+            jsonArray.put(weapon.toJson());
+        }
+        return jsonArray;
     }
 }

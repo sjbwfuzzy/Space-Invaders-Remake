@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 // Represents the player, having health, attack, speed, experience, level
-public class Player {
+public class Player implements Writable {
     private ArrayList<Integer> stats;
 
     private int experience;
@@ -11,18 +15,12 @@ public class Player {
 
     private Inventory inventory;
 
-    // EFFECTS: constructs player with starting stats, experience and level, and starting inventory
-    public Player() {
-        stats = new ArrayList<>(4);
-        stats.add(10); //max health
-        stats.add(1); //bonus attack
-        stats.add(10); //speed
-        stats.add(100); //fire rate (percentage)
-
-        experience = 0;
-        level = 1;
-
-        inventory = new Inventory();
+    // EFFECTS: constructs player with given parameters
+    public Player(ArrayList<Integer> s, int exp, int lvl, Inventory i) {
+        stats = s;
+        experience = exp;
+        level = lvl;
+        inventory = i;
     }
 
     public int getMaxHealth() {
@@ -118,5 +116,24 @@ public class Player {
     // EFFECTS: subtracts level from player
     public void subLevel(int amount) {
         level -= amount;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("stats", statsToJson());
+        json.put("experience", experience);
+        json.put("level", level);
+        json.put("inventory", inventory.toJson());
+        return json;
+    }
+
+    // EFFECTS: returns player stats as a JSON array
+    private JSONArray statsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (int stat : stats) {
+            jsonArray.put(stat);
+        }
+        return jsonArray;
     }
 }

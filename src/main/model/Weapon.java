@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // a weapon, having name, fire rate, bullet type
-public class Weapon {
+public class Weapon implements Writable {
     String name;
     int fireRate;
     Bullet bulletType;
@@ -27,5 +30,14 @@ public class Weapon {
 
     public Bullet getBulletType() {
         return bulletType;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("fireRate", fireRate);
+        json.put("bulletType", bulletType.toJson());
+        return json;
     }
 }
