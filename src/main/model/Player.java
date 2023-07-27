@@ -1,78 +1,95 @@
 package model;
 
+import java.util.ArrayList;
+
 // Represents the player, having health, attack, speed, experience, level
 public class Player {
-    private int maxhealth;
-    private int attack;
-    private int speed;
+    private ArrayList<Integer> stats;
+
     private int experience;
     private int level;
 
-    // EFFECTS: constructs player with starting stats and inventory
+    private Inventory inventory;
+
+    // EFFECTS: constructs player with starting stats, experience and level, and starting inventory
     public Player() {
-        maxhealth = 10;
-        attack = 1;
-        speed = 1;
+        stats = new ArrayList<>(4);
+        stats.add(10); //max health
+        stats.add(1); //bonus attack
+        stats.add(10); //speed
+        stats.add(100); //fire rate (percentage)
+
         experience = 0;
         level = 1;
+
+        inventory = new Inventory();
     }
 
     public int getMaxHealth() {
-        return maxhealth;
+        return stats.get(0);
     }
 
-    // REQUIRES: amount > 0
-    // MODIFIES: this
-    // EFFECTS: adds health to player
-    public void addMaxHealth(int amount) {
-        maxhealth += amount;
-    }
-
-    // REQUIRES: amount > 0 and amount < maxhealth
-    // MODIFIES: this
-    // EFFECTS: subtracts health from player
-    public void subMaxHealth(int amount) {
-        maxhealth -= amount;
-    }
-
-    public int getAttack() {
-        return attack;
-    }
-
-    // REQUIRES: amount > 0
-    // MODIFIES: this
-    // EFFECTS: adds attack to player
-    public void addAttack(int amount) {
-        attack += amount;
-    }
-
-    // REQUIRES: amount > 0 and amount < attack
-    // MODIFIES: this
-    // EFFECTS: subtracts attack from player
-    public void subAttack(int amount) {
-        attack -= amount;
+    public int getBonusAttack() {
+        return stats.get(1);
     }
 
     public int getSpeed() {
-        return speed;
+        return stats.get(2);
     }
 
-    // REQUIRES: amount > 0
-    // MODIFIES: this
-    // EFFECTS: adds speed to player
-    public void addSpeed(int amount) {
-        speed += amount;
-    }
-
-    // REQUIRES: amount > 0 and amount < speed
-    // MODIFIES: this
-    // EFFECTS: subtracts speed from player
-    public void subSpeed(int amount) {
-        speed -= amount;
+    public int getFireRate() {
+        return stats.get(3);
     }
 
     public int getExperience() {
         return experience;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    // REQUIRES: buff.getModifiers().size() = stats.size()
+    // MODIFIES: this, buff
+    // EFFECTS: If inventory has space, updates stats. If any updated value is less than 1, edit the buff such that
+    // the updated value will be exactly one, and add buff to inventory, and return true. If Inventory has no space,
+    // return false
+    public boolean updateStats(Buff buff) {
+        boolean isAdded = inventory.addBuff(buff);
+        if (isAdded) {
+            for (int index = 0; index < stats.size(); index++) {
+                int modifier = buff.getOneModifier(index);
+                int current = stats.get(index);
+                int newValue = current + modifier;
+                if (newValue >= 1) {
+                    stats.set(index, newValue);
+                } else {
+                    buff.setOneModifier(index, 1 - current);
+                    stats.set(index, 1);
+                }
+            }
+        }
+        return isAdded;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: If buff is in inventory, removes buff from inventory, updates stats accordingly, and returns true.
+    // If buff is not in inventory, return false.
+    public boolean removeStats(Buff buff) {
+        boolean isRemoved = inventory.removeBuff(buff);
+        if (isRemoved) {
+            for (int index = 0; index < stats.size(); index++) {
+                int reversedModifier = -buff.getOneModifier(index);
+                int current = stats.get(index);
+                int newValue = current + reversedModifier;
+                stats.set(index, newValue);
+            }
+        }
+        return isRemoved;
     }
 
     // REQUIRES: amount > 0
@@ -87,10 +104,6 @@ public class Player {
     // EFFECTS: subtracts experience from player
     public void subExperience(int amount) {
         experience -= amount;
-    }
-
-    public int getLevel() {
-        return level;
     }
 
     // REQUIRES: amount > 0

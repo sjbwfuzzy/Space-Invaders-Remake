@@ -3,29 +3,29 @@ package model;
 // a weapon, having name, fire rate, bullet type
 public class Weapon {
     String name;
-    int firerate;
-    Bullet bullettype;
+    int fireRate;
+    Bullet bulletType;
 
-    // EFFECTS: creates a weapon with name, firerate, and a bullettype
-    public Weapon(String name, int firerate, Bullet bullettype) {
+    // EFFECTS: creates a weapon with name, fire rate, and a bullet type
+    public Weapon(String name, int fr, Bullet bt) {
         this.name = name;
-        this.firerate = firerate;
-        this.bullettype = bullettype;
+        this.fireRate = fr;
+        this.bulletType = bt;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getFirerate() {
-        return firerate;
+    public int getFireRate() {
+        return fireRate;
     }
 
-    public void setFirerate(int firerate) {
-        this.firerate = firerate;
+    public void setFireRate(int fireRate) {
+        this.fireRate = fireRate;
     }
 
-    public Bullet getBullettype() {
-        return bullettype;
+    public Bullet getBulletType() {
+        return bulletType;
     }
 }

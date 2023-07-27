@@ -12,17 +12,15 @@ class InventoryTest {
     private Inventory testInventory;
     private Weapon w1;
     private Weapon w2;
-    private StatBuff sb1;
-    private WeaponBuff wb1;
+    private Buff buff1;
+    private Buff buff2;
     private Bullet b1;
 
     @BeforeEach
     void runBefore() {
         testInventory = new Inventory();
-        List<String> targets = new ArrayList<>();
-        List<Integer> amounts = new ArrayList<>();
-        sb1 = new StatBuff("sb1", targets, amounts);
-        wb1 = new WeaponBuff("wb1", targets, amounts);
+        buff1 = new Buff("buff1", new ArrayList<>());
+        buff2 = new Buff("buff2", new ArrayList<>());
         b1 = new Bullet(1,2, 3, 4, true);
         w1 = new Weapon("w1", 5, b1);
         w2 = new Weapon("w2", 10, b1);
@@ -85,31 +83,57 @@ class InventoryTest {
 
     @Test
     void testAddBuff() {
-        assertTrue(testInventory.addBuff(sb1));
+        assertTrue(testInventory.addBuff(buff1));
         assertEquals(1, testInventory.getBuffs().size());
-        assertTrue(testInventory.getBuffs().contains(sb1));
+        assertTrue(testInventory.getBuffs().contains(buff1));
 
-        assertTrue(testInventory.addBuff(wb1));
+        assertTrue(testInventory.addBuff(buff2));
         assertEquals(2, testInventory.getBuffs().size());
-        assertTrue(testInventory.getBuffs().contains(wb1));
+        assertTrue(testInventory.getBuffs().contains(buff2));
 
-        testInventory.addBuff(sb1);
-        testInventory.addBuff(wb1);
-        assertTrue(testInventory.addBuff(sb1));
-        assertFalse(testInventory.addBuff(sb1));
+        testInventory.addBuff(buff1);
+        testInventory.addBuff(buff2);
+        assertTrue(testInventory.addBuff(buff1));
+        assertFalse(testInventory.addBuff(buff1));
     }
 
     @Test
     void testRemoveBuff() {
-        assertFalse(testInventory.removeBuff(sb1));
-        testInventory.addBuff(sb1);
-        testInventory.addBuff(wb1);
+        assertFalse(testInventory.removeBuff(buff1));
+        testInventory.addBuff(buff1);
+        testInventory.addBuff(buff2);
 
-        assertTrue(testInventory.removeBuff(sb1));
+        assertTrue(testInventory.removeBuff(buff1));
         assertEquals(1, testInventory.getBuffs().size());
-        assertTrue(testInventory.getBuffs().contains(wb1));
+        assertTrue(testInventory.getBuffs().contains(buff2));
 
-        assertTrue(testInventory.removeBuff(wb1));
+        assertTrue(testInventory.removeBuff(buff2));
         assertEquals(0, testInventory.getBuffs().size());
+    }
+
+    @Test
+    void testContainsBuff() {
+        assertFalse(testInventory.containsBuff("buff1"));
+        testInventory.addBuff(buff1);
+        assertTrue(testInventory.containsBuff("buff1"));
+        assertFalse(testInventory.containsBuff("buff2"));
+    }
+
+    @Test
+    void testGetBuff() {
+        testInventory.addBuff(buff1);
+        testInventory.addBuff(buff2);
+        ArrayList<Integer> testModifiers = new ArrayList<>();
+        testModifiers.add(3);
+        testModifiers.add(-1);
+        testModifiers.add(-11);
+        testModifiers.add(-20);
+        testInventory.addBuff(new Buff("buff1", testModifiers));
+
+        assertEquals(buff1, testInventory.getBuff("buff1"));
+        assertEquals(buff2, testInventory.getBuff("buff2"));
+
+        // this should never really be reached, I'm just adding this test for code coverage
+        assertNotEquals(buff1, testInventory.getBuff("buff3"));
     }
 }

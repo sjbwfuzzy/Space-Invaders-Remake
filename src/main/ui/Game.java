@@ -18,7 +18,7 @@ public class Game {
     // EFFECTS: initializes the game
     public Game() {
         player = new Player();
-        inventory = new Inventory();
+        inventory = player.getInventory();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
         runGame();
@@ -83,10 +83,11 @@ public class Game {
 
     // EFFECTS: prints out inventory
     private void viewInventory() {
+        System.out.println("Your inventory: ");
         System.out.println("Money: " + inventory.getMoney());
         System.out.println("Weapons: ");
         for (Weapon weapon : inventory.getWeapons()) {
-            System.out.println("Weapon Name: " + weapon.getName() + ", Fire Rate: " + weapon.getFirerate()
+            System.out.println("Weapon Name: " + weapon.getName() + ", Fire Rate: " + weapon.getFireRate()
                     + ", Bullet type: coming soon...");
         }
         System.out.println("Buffs: ");
@@ -97,9 +98,11 @@ public class Game {
 
     // EFFECTS: prints out player stats
     private void viewStats() {
-        System.out.println("Health: " + player.getMaxHealth());
-        System.out.println("Attack: " + player.getAttack());
+        System.out.println("Your stats: ");
+        System.out.println("Max Health: " + player.getMaxHealth());
+        System.out.println("Bonus Attack: " + player.getBonusAttack());
         System.out.println("Speed: " + player.getSpeed());
+        System.out.println("Fire Rate: " + player.getFireRate());
         System.out.println("Experience: " + player.getExperience());
         System.out.println("Level: " + player.getLevel());
     }
@@ -109,6 +112,7 @@ public class Game {
     private void addMoney() {
         System.out.println("How much money to add?");
         inventory.addMoney(input.nextInt());
+        System.out.println("Money was added.");
     }
 
     // MODIFIES: this
@@ -116,6 +120,7 @@ public class Game {
     private void removeMoney() {
         System.out.println("How much money to remove?");
         inventory.removeMoney(input.nextInt());
+        System.out.println("Money was removed.");
     }
 
     // MODIFIES: this
@@ -148,144 +153,46 @@ public class Game {
     }
 
     // MODIFIES: this
-    // EFFECTS: asks the user to choose type of buff to add
+    // EFFECTS: adds a buff with given modifiers to player's inventory, and updates player stats, prints message if
+    // inventory is full.
     private void addBuff() {
-        System.out.println("Stat Buff or Weapon Buff?");
-        System.out.println("1. Stat Buff");
-        System.out.println("2. Weapon Buff");
-        int choice = input.nextInt();
-        if (choice == 1) {
-            addStatBuff();
-        } else if (choice == 2) {
-            addWeaponBuff();
+        ArrayList<Integer> modifiers = new ArrayList<>();
+        System.out.println("Give a name to the buff: ");
+        input.nextLine();
+        String name = input.nextLine();
+
+        System.out.println("For the following, note that you can choose negative integers as well. However, "
+                + "a stat cannot be decreased below 1.");
+        System.out.println("Increase health by: ");
+        modifiers.add(input.nextInt());
+        System.out.println("Increase bonus attack by: ");
+        modifiers.add(input.nextInt());
+        System.out.println("Increase speed by: ");
+        modifiers.add(input.nextInt());
+        System.out.println("Increase fire rate by: ");
+        modifiers.add(input.nextInt());
+
+        if (player.updateStats(new Buff(name, modifiers))) {
+            System.out.println("Buff: " + name + " was added to inventory.");
         } else {
-            System.out.println("Not a valid choice");
+            System.out.println("Buff was not added, you have reached the maximum number of buffs!");
         }
-
     }
 
     // MODIFIES: this
-    // EFFECTS: asks for input to add a Stat Buff
-    private void addStatBuff() {
-        System.out.println("Give a name: ");
-        input.nextLine();
-        String name = input.nextLine();
-        System.out.println("Give stat to buff: ");
-        System.out.println("1. Health");
-        System.out.println("2. Attack");
-        System.out.println("3. Speed");
-        int choice = input.nextInt();
-        if (choice != 1 && choice != 2 && choice != 3) {
-            System.out.println("Not a valid choice");
-            return;
-        }
-        System.out.println("Give amount to buff by: ");
-        updateStatBuff(choice, name);
-    }
-
-    // Helper for addStatBuff
-    // REQUIRES: choice is between 1 and 3
-    // MODiFIES: this
-    // EFFECTS: adds stat buff to inventory, updates player stats
-    private void updateStatBuff(int choice, String name) {
-        int amount = input.nextInt();
-        List<String> targets = new ArrayList<>();
-        List<Integer> amounts = new ArrayList<>();
-        Buff buff;
-        if (choice == 1) {
-            player.addMaxHealth(amount);
-            targets.add("health");
-        } else if (choice == 2) {
-            player.addAttack(amount);
-            targets.add("attack");
-        } else if (choice == 3) {
-            player.addSpeed(amount);
-            targets.add("speed");
-        }
-        amounts.add(amount);
-        buff = new StatBuff(name, targets, amounts);
-        inventory.addBuff(buff);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: adds chosen amount to chosen weapon stat (currently only one choice)
-    private void addWeaponBuff() {
-        System.out.println("Give a name: ");
-        input.nextLine();
-        String name = input.nextLine();
-        System.out.println("Give stat to buff: ");
-        System.out.println("1. Fire Rate");
-        int choice = input.nextInt();
-        if (choice == 1) {
-            System.out.println("Give amount to buff by: ");
-            int amount = input.nextInt();
-            for (Weapon weapon : inventory.getWeapons()) {
-                int temp = weapon.getFirerate();
-                weapon.setFirerate(temp + amount);
-            }
-            List<String> targets = new ArrayList<>();
-            targets.add("firerate");
-            List<Integer> amounts = new ArrayList<>();
-            amounts.add(amount);
-            Buff buff = new WeaponBuff(name, targets, amounts);
-            inventory.addBuff(buff);
-            return;
-        }
-        System.out.println("Not a valid choice");
-    }
-
-    // Doesn't differentiate between weapon and stat buffs, this is a problem and should be fixed once the game
-    // is actually implemented.
-    // MODIFIES: this
-    // EFFECTS: removes the buff from inventory
+    // EFFECTS: removes the buff from inventory and updates player stats accordingly. If more than one buff with the
+    // same name, remove the first one (when the game is implemented, all buffs with the same name would have the same
+    // modifiers, so this wouldn't be a problem). If buff doesn't exist, print a message
     private void removeBuff() {
-        System.out.println("Name the buff: ");
+        System.out.println("Name the buff to be removed: ");
         input.nextLine();
         String name = input.nextLine();
-        for (Buff buff : inventory.getBuffs()) {
-            String bufftype = buff.getClass().getSimpleName();
-            if (Objects.equals(buff.getName(), name) && bufftype.equals("StatBuff")) {
-                removeStatBuff(buff);
-                inventory.removeBuff(buff);
-                return;
-            } else if (Objects.equals(buff.getName(), name) && bufftype.equals("WeaponBuff")) {
-                removeWeaponBuff(buff);
-                inventory.removeBuff(buff);
-                return;
-            }
+        if (inventory.containsBuff(name)) {
+            player.removeStats(inventory.getBuff(name));
+            System.out.println("Buff was removed.");
+            return;
         }
-        System.out.println("Not a valid choice");
-    }
-
-    // MODIFIES: this
-    // EFFECTS: removes the stats from the stat buff from the player
-    private void removeStatBuff(Buff buff) {
-        List<String> targets = buff.getTargets();
-        List<Integer> amounts = buff.getAmounts();
-        for (int counter = 0; counter < targets.size(); counter++) {
-            if (Objects.equals(targets.get(counter), "health")) {
-                player.subMaxHealth(amounts.get(counter));
-            } else if (Objects.equals(targets.get(counter), "attack")) {
-                player.subAttack(amounts.get(counter));
-            } else if (Objects.equals(targets.get(counter), "speed")) {
-                player.subSpeed(amounts.get(counter));
-            }
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: removes the weapon buff effect from all weapons
-    private void removeWeaponBuff(Buff buff) {
-        List<String> targets = buff.getTargets();
-        List<Integer> amounts = buff.getAmounts();
-        for (int counter = 0; counter < targets.size(); counter++) {
-            if (Objects.equals(targets.get(counter), "firerate")) {
-                for (Weapon weapon : inventory.getWeapons()) {
-                    int temp = weapon.getFirerate();
-                    weapon.setFirerate(temp - amounts.get(counter));
-                }
-            }
-        }
+        System.out.println("There is no such buff!");
     }
 }
 

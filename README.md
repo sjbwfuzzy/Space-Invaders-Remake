@@ -41,6 +41,8 @@ directions
  - As a user, I want the difficulty of the game to increase along with my current level
  - As a user, I want to be able to buy and upgrade my items using the shop
  - As a user, I want to be able to fight different enemies
+ - As a user, I want to be able to save the game state
+ - As a user, I want to be able to load the game state back.
 
 
 

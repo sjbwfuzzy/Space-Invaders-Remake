@@ -17,15 +17,15 @@ class WeaponTest {
 
     @Test
     void testConstructor() {
-        assertEquals(55, testWeapon.getFirerate());
+        assertEquals(55, testWeapon.getFireRate());
         assertEquals("w1", testWeapon.getName());
-        assertEquals(b1, testWeapon.getBullettype());
+        assertEquals(b1, testWeapon.getBulletType());
     }
 
     @Test
     void testSetFirerate() {
-        testWeapon.setFirerate(55);
-        assertEquals(55, testWeapon.getFirerate());
+        testWeapon.setFireRate(55);
+        assertEquals(55, testWeapon.getFireRate());
     }
 
 }

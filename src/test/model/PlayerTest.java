@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
@@ -16,48 +18,63 @@ class PlayerTest {
     @Test
     void testConstructor() {
         assertEquals(10, testPlayer.getMaxHealth());
-        assertEquals(1, testPlayer.getAttack());
-        assertEquals(1, testPlayer.getSpeed());
+        assertEquals(1, testPlayer.getBonusAttack());
+        assertEquals(10, testPlayer.getSpeed());
+        assertEquals(100, testPlayer.getFireRate());
+
         assertEquals(0, testPlayer.getExperience());
         assertEquals(1, testPlayer.getLevel());
     }
 
     @Test
-    void addMaxHealth() {
-        testPlayer.addMaxHealth(5);
-        assertEquals(15, testPlayer.getMaxHealth());
+    void testUpdateStats() {
+        ArrayList<Integer> testModifiers = new ArrayList<>();
+        testModifiers.add(3);
+        testModifiers.add(-1);
+        testModifiers.add(-11);
+        testModifiers.add(-20);
+        Buff testBuff = new Buff("test", testModifiers);
+        assertTrue(testPlayer.updateStats(testBuff));
+        assertEquals(13, testPlayer.getMaxHealth());
+        assertEquals(1, testPlayer.getBonusAttack());
+        assertEquals(1, testPlayer.getSpeed());
+        assertEquals(80, testPlayer.getFireRate());
+
+        assertEquals(3, testBuff.getOneModifier(0));
+        assertEquals(0, testBuff.getOneModifier(1));
+        assertEquals(-9, testBuff.getOneModifier(2));
+        assertEquals(-20, testBuff.getOneModifier(3));
+
+        assertEquals(1, testPlayer.getInventory().getBuffs().size());
+        assertEquals(testBuff, testPlayer.getInventory().getBuffs().get(0));
+
+        testPlayer.updateStats(testBuff);
+        testPlayer.updateStats(testBuff);
+        testPlayer.updateStats(testBuff);
+        assertTrue(testPlayer.updateStats(testBuff));
+        assertFalse(testPlayer.updateStats(testBuff));
+
     }
 
     @Test
-    void subMaxHealth() {
-        testPlayer.subMaxHealth(5);
-        assertEquals(5, testPlayer.getMaxHealth());
-    }
+    void testRemoveStats() {
+        ArrayList<Integer> testModifiers = new ArrayList<>();
+        testModifiers.add(3);
+        testModifiers.add(-1);
+        testModifiers.add(-11);
+        testModifiers.add(-20);
+        Buff testBuff = new Buff("test", testModifiers);
+        testPlayer.updateStats(testBuff);
+        assertTrue(testPlayer.removeStats(testBuff));
 
-    @Test
-    void addAttack() {
-        testPlayer.addAttack(5);
-        assertEquals(6, testPlayer.getAttack());
-    }
+        assertEquals(10, testPlayer.getMaxHealth());
+        assertEquals(1, testPlayer.getBonusAttack());
+        assertEquals(10, testPlayer.getSpeed());
+        assertEquals(100, testPlayer.getFireRate());
 
-    @Test
-    void subAttack() {
-        testPlayer.addAttack(5);
-        testPlayer.subAttack(4);
-        assertEquals(2, testPlayer.getAttack());
-    }
+        assertEquals(0, testPlayer.getInventory().getBuffs().size());
 
-    @Test
-    void addSpeed() {
-        testPlayer.addSpeed(5);
-        assertEquals(6, testPlayer.getSpeed());
-    }
-
-    @Test
-    void subSpeed() {
-        testPlayer.addSpeed(5);
-        testPlayer.subSpeed(4);
-        assertEquals(2, testPlayer.getSpeed());
+        assertFalse(testPlayer.removeStats(new Buff("asdf", new ArrayList<>())));
     }
 
     @Test

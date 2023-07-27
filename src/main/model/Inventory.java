@@ -1,7 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 // The inventory of a player, having money, list of Weapon, and list of Buff
 public class Inventory {
@@ -9,8 +9,8 @@ public class Inventory {
     private static final int MAX_BUFFS = 5;
 
     private int money;
-    private List<Weapon> weapons;
-    private List<Buff> buffs;
+    private ArrayList<Weapon> weapons;
+    private ArrayList<Buff> buffs;
 
     // EFFECTS: creates the default inventory
     public Inventory() {
@@ -52,12 +52,11 @@ public class Inventory {
     // MODIFIES: this
     // EFFECTS: if inventory still has space for buff, return true and add buff. Else, return false
     public boolean addBuff(Buff buff) {
-        if (buffs.size() < MAX_BUFFS) {
+        boolean canAdd = buffs.size() < MAX_BUFFS;
+        if (canAdd) {
             buffs.add(buff);
-            return true;
-        } else {
-            return false;
         }
+        return canAdd;
     }
 
     // MODIFIES: this
@@ -70,11 +69,34 @@ public class Inventory {
         return money;
     }
 
-    public List<Weapon> getWeapons() {
+    public ArrayList<Weapon> getWeapons() {
         return weapons;
     }
 
-    public List<Buff> getBuffs() {
+    public ArrayList<Buff> getBuffs() {
         return buffs;
+    }
+
+    // EFFECTS: returns true if there is a buff with given name, otherwise return false
+    public boolean containsBuff(String name) {
+        for (Buff buff : buffs) {
+            if (Objects.equals(buff.getName(), name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // REQUIRES: containsBuff(name) is true
+    // EFFECTS: returns the first buff with given name
+    public Buff getBuff(String name) {
+        for (Buff buff : buffs) {
+            if (Objects.equals(buff.getName(), name)) {
+                return buff;
+            }
+        }
+        // this should never be reached, as the game should always check that containsBuff(name) is true before
+        // attempting to call getBuff(name).
+        return new Buff("Something went wrong", new ArrayList<>());
     }
 }
