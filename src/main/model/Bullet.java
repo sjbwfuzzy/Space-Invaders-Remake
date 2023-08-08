@@ -79,6 +79,14 @@ public class Bullet implements Writable {
         return ypos;
     }
 
+    public int getXdirection() {
+        return xdirection;
+    }
+
+    public int getYdirection() {
+        return ydirection;
+    }
+
     public void setXdirection(int xdirection) {
         this.xdirection = xdirection;
     }

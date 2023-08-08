@@ -1,33 +1,101 @@
 {
-  "stats": [
-    110,
-    101,
-    5,
-    1
-  ],
-  "level": 1,
-  "experience": 0,
-  "inventory": {
-    "money": 20,
-    "buffs": [{
-      "name": "aBuff",
-      "modifiers": [
-        100,
-        100,
-        -5,
-        -99
-      ]
-    }],
-    "weapons": [{
-      "fireRate": 240,
-      "bulletType": {
-        "damage": 1,
-        "penetration": 1,
-        "radius": 1,
-        "speed": 1,
+    "invading": false,
+    "enemyBullets": [],
+    "enemies": [
+        {
+            "item": null,
+            "ypos": 0,
+            "xpos": 0,
+            "size": "LARGE",
+            "health": 40
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 0
+            },
+            "ypos": 1,
+            "xpos": 1,
+            "size": "SMALL",
+            "health": 10
+        }
+    ],
+    "inventory": {
+        "money": 10,
+        "buffs": [{
+            "identifier": "Buff",
+            "ypos": 0,
+            "xpos": 0,
+            "type": 0
+        }],
+        "weapons": [
+            {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            },
+            {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            }
+        ]
+    },
+    "lowest": 0,
+    "movementUnits": 1,
+    "score": 0,
+    "leftmost": 0,
+    "isGameOver": false,
+    "rightmost": 0,
+    "items": [],
+    "player": {
+        "ypos": 560,
+        "xpos": 400,
+        "stats": [
+            11,
+            3,
+            5,
+            104
+        ],
+        "level": 11,
+        "health": 10,
+        "experience": 10,
+        "ydir": 0,
+        "inventory": {
+            "money": 10,
+            "buffs": [{
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 0
+            }],
+            "weapons": [
+                {
+                    "identifier": "Weapon",
+                    "ypos": 0,
+                    "xpos": 0,
+                    "size": "SMALL"
+                },
+                {
+                    "identifier": "Weapon",
+                    "ypos": 0,
+                    "xpos": 0,
+                    "size": "SMALL"
+                }
+            ]
+        },
+        "xdir": 0
+    },
+    "playerBullets": [{
+        "ypos": 0,
+        "xpos": 0,
+        "size": "SMALL",
+        "ydir": -1,
+        "xdir": 0,
         "mybullet": true
-      },
-      "name": "aWeapon"
     }]
-  }
 }

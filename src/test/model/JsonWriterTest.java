@@ -59,7 +59,7 @@ public class JsonWriterTest {
     @Test
     void testWriterGeneralGame() {
         try {
-            JsonWriter writer = new JsonWriter("./data/testWriterInitialGame.json");
+            JsonWriter writer = new JsonWriter("./data/testWriterGeneralGame.json");
             g.getPlayer().addLevel(10);
             g.getPlayer().addExperience(10);
 
@@ -77,11 +77,23 @@ public class JsonWriterTest {
 
             g.getInventory().addMoney(10);
 
+            Enemy e1 = new Enemy("LARGE", 0, 0);
+            Enemy e2 = new Enemy("SMALL", 1, 1);
+
+            e1.setItem(null);
+            e2.setItem(buff1);
+
+            g.getEnemies().add(e1);
+            g.getEnemies().add(e2);
+
+            Bullet bullet = new Bullet("SMALL", true, 0, 0);
+            g.getPlayerBullets().add(bullet);
+
             writer.open();
             writer.write(g);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterInitialGame.json");
+            JsonReader reader = new JsonReader("./data/testWriterGeneralGame.json");
             g = reader.read();
             Player p = g.getPlayer();
             assertEquals(11, p.getMaxHealth());
@@ -104,6 +116,31 @@ public class JsonWriterTest {
             assertEquals(2, g.getInventory().getWeapons().size());
             assertEquals("Small Gun", weapon1.getName());
             assertEquals(3, weapon1.getFireRate());
+
+            assertEquals("LARGE", g.getEnemies().get(0).getSize());
+            assertEquals(40, g.getEnemies().get(0).getHealth());
+            assertEquals(0, g.getEnemies().get(0).getX());
+            assertEquals(0, g.getEnemies().get(0).getY());
+            assertNull(g.getEnemies().get(0).getItem());
+
+            assertEquals("SMALL", g.getEnemies().get(1).getSize());
+            assertEquals(10, g.getEnemies().get(1).getHealth());
+            assertEquals(1, g.getEnemies().get(1).getX());
+            assertEquals(1, g.getEnemies().get(1).getY());
+            assertEquals("Buff", g.getEnemies().get(1).getItem().getIdentifier());
+
+            assertEquals("SMALL", g.getPlayerBullets().get(0).getSize());
+            assertTrue(g.getPlayerBullets().get(0).isMybullet());
+            assertEquals(0, g.getPlayerBullets().get(0).getX());
+            assertEquals(0, g.getPlayerBullets().get(0).getY());
+            assertEquals(0, g.getPlayerBullets().get(0).getXdirection());
+            assertEquals(-1, g.getPlayerBullets().get(0).getYdirection());
+
+
+
+
+
+
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
