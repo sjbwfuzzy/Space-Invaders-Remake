@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.Set;
 
 public class StatPanel extends JPanel {
-    private static final int LBL_WIDTH = 100;
+    private static final int LBL_WIDTH = 200;
     private static final int LBL_HEIGHT = 30;
     private static final String MAX_HEALTH = "Max Health: ";
     private static final String ATTACK = "Bonus Attack: ";
@@ -43,7 +43,7 @@ public class StatPanel extends JPanel {
         add(speed);
         add(Box.createHorizontalStrut(10));
         add(firerate);
-        setVisible(false);
+        setVisible(true);
     }
 
     // MODIFIES: this
@@ -53,13 +53,5 @@ public class StatPanel extends JPanel {
         attack.setText(ATTACK + game.getPlayer().getBonusAttack());
         speed.setText(SPEED + game.getPlayer().getSpeed());
         firerate.setText(FIRE_RATE + game.getPlayer().getFireRate() + "%");
-    }
-
-    // MODIFIES: this
-    // EFFECTS: changes visibility of this panel when s key is pressed
-    public void handleKey(int keyCode) {
-        if (keyCode == KeyEvent.VK_S) {
-            setVisible(!isVisible());
-        }
     }
 }

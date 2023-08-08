@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 // Represents the player
 public class Player implements Writable {
-    public static final int SIZE = 15;
+    public static final int SIZE = 10;
     public static final Color COLOR = new Color(250, 128, 20);
 
     // includes Max Health, Bonus Attack, Movement Speed, and Fire Rate
@@ -44,13 +44,20 @@ public class Player implements Writable {
     }
 
 
-
     public int getX() {
         return xpos;
     }
 
     public int getY() {
         return ypos;
+    }
+
+    public int getXdirection() {
+        return xdirection;
+    }
+
+    public int getYdirection() {
+        return ydirection;
     }
 
     public int getHealth() {
@@ -135,13 +142,6 @@ public class Player implements Writable {
         ydirection = 1;
     }
 
-    // MODIFIES: this
-    // EFFECTS: resets x and y direction to 0
-    public void resetDirection() {
-        xdirection = 0;
-        ydirection = 0;
-    }
-
     // Updates the tank on clock tick
     // modifies: this
     // effects:  tank is moved DX units in whatever direction it is facing and is
@@ -190,6 +190,14 @@ public class Player implements Writable {
             }
         }
         return isAdded;
+    }
+
+    public boolean collidedWith(Enemy e) {
+        Rectangle enemyHitbox = new Rectangle(e.getX() - e.getXsize() / 2, e.getY() - e.getYsize() / 2,
+                e.getXsize(), e.getYsize());
+        Rectangle playerHitbox = new Rectangle(getX() - Player.SIZE / 2, getY() - Player.SIZE / 2,
+                Player.SIZE, Player.SIZE);
+        return enemyHitbox.intersects(playerHitbox);
     }
 
     // MODIFIES: this

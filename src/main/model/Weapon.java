@@ -14,7 +14,7 @@ public class Weapon extends Item implements Writable {
 
     private int fireRate; // shots per second
     private String size;
-    private boolean canFire = false;
+    private boolean canFire = true;
     private Timer timer;
 
     // EFFECTS: creates a weapon with name, fire rate, and a bullet
@@ -22,6 +22,12 @@ public class Weapon extends Item implements Writable {
         super(x, y);
         this.size = size;
         setIdentifier("Weapon");
+        timer = new Timer(100000000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                return;
+            }
+        });
         switch (size) {
             case "SMALL":
                 name = "Small Gun";
@@ -40,9 +46,8 @@ public class Weapon extends Item implements Writable {
 
     // delay in milliseconds
     // MODIFIES: this
-    // EFFECTS: initializes the timer to set canFire to true every delay milliseconds. Set canFire to true first.
+    // EFFECTS: initializes the timer to set canFire to true every delay milliseconds.
     public void setTimer(int delay) {
-        canFire = true;
         timer = new Timer(delay, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,6 +61,12 @@ public class Weapon extends Item implements Writable {
     // EFFECTS: restarts the timer
     public void restartTimer() {
         timer.restart();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: stops the timer
+    public void stopTimer() {
+        timer.stop();
     }
 
     public int getFireRate() {

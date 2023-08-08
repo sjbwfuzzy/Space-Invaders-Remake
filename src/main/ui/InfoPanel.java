@@ -5,6 +5,8 @@ import model.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 // inspiration from https://github.students.cs.ubc.ca/CPSC210/B02-SpaceInvadersBase
 // the panel where info is displayed
@@ -16,6 +18,8 @@ public class InfoPanel extends JPanel {
     private Game game;
     private JLabel score;
     private JLabel health;
+    private JButton loadGame;
+    private JButton saveGame;
 
     // EFFECTS: sets the background colour and draws the initial labels
     public InfoPanel(Game g) {
@@ -28,6 +32,34 @@ public class InfoPanel extends JPanel {
         add(score);
         add(Box.createHorizontalStrut(10));
         add(health);
+        add(Box.createHorizontalStrut(10));
+        setSaveButton();
+        add(Box.createHorizontalStrut(10));
+        setLoadButton();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets a JButton that saves game when pressed
+    private void setSaveButton() {
+        saveGame = new JButton("Save Game");
+        saveGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                game.saveGame();
+            }
+        });
+        add(saveGame);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets a JButton that loads game when pressed
+    private void setLoadButton() {
+        loadGame = new JButton("Load Game");
+        loadGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                game.loadGame();
+            }
+        });
+        add(loadGame);
     }
 
     // MODIFIES: this
@@ -35,5 +67,9 @@ public class InfoPanel extends JPanel {
     public void update() {
         score.setText(SCORE_TXT + game.getScore());
         health.setText(HEALTH_TXT + game.getPlayer().getHealth());
+        if (game.isOver()) {
+            loadGame.setVisible(false);
+            saveGame.setVisible(false);
+        }
     }
 }

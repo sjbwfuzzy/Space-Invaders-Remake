@@ -2,9 +2,13 @@ package model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 import persistence.Writable;
 
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 // inspiration from https://github.students.cs.ubc.ca/CPSC210/B02-SpaceInvadersBase
@@ -13,6 +17,12 @@ import java.util.*;
 public class Game implements Writable {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
+    private static final int FIRE_PERIOD = 1000;
+
+    private static final String JSON_STORE = "./data/game.json";
+
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     private List<Bullet> enemyBullets;
     private List<Bullet> playerBullets;
@@ -23,6 +33,7 @@ public class Game implements Writable {
     private Inventory inventory;
     private int score;
     private Boolean invading;
+    private Set<Integer> keysPressed;
 
     // used for enemy related actions
     private int lowest;
@@ -33,6 +44,8 @@ public class Game implements Writable {
     // MODIFIES: this
     // EFFECTS: initializes game
     public Game() {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         enemyBullets = new ArrayList<>();
         playerBullets = new ArrayList<>();
         items = new ArrayList<>();
@@ -52,8 +65,8 @@ public class Game implements Writable {
 
         ArrayList<Integer> stats = new ArrayList<>(4);
         stats.add(10); //max health
-        stats.add(0); //bonus attack
-        stats.add(1); //speed
+        stats.add(1); //bonus attack
+        stats.add(2); //speed
         stats.add(100); //fire rate (percentage)
 
         int experience = 0;
@@ -66,14 +79,11 @@ public class Game implements Writable {
 
         player = new Player(stats, experience, level, new Inventory(money, weapons, buffs), WIDTH / 2, HEIGHT - 40);
         inventory = player.getInventory();
+        weapons.get(0).setTimer(calcTimerDelay(weapons.get(0)));
     }
 
     public boolean isOver() {
         return isGameOver;
-    }
-
-    public int getNumBullets() {
-        return enemyBullets.size();
     }
 
     public int getScore() {
@@ -102,6 +112,10 @@ public class Game implements Writable {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
     }
 
     public void setEnemyBullets(List<Bullet> enemyBullets) {
@@ -155,58 +169,77 @@ public class Game implements Writable {
     // MODIFIES: this
     // EFFECTS:  updates player, bullets and enemies if there are still enemies, else do the invading sequence
     public void update() {
-        if (enemies.size() == 0) {
-            invading = true;
-            setupEnemies();
-        }
-        if (!invading) {
-            enemyFire();
-            moveBullets();
-            moveEnemies();
-            moveItems();
-            player.move();
-
-            handleBoundary();
-
-            checkCollisions();
-            checkCollisionItems();
-            updateBounds(); // probably poorly implemented...
-            checkGameOver();
+        if (!isGameOver) {
+            if (enemies.size() == 0) {
+                invading = true;
+                setupEnemies();
+            }
+            if (!invading) {
+                enemyFire();
+                moveBullets();
+                moveEnemies();
+                moveItems();
+                player.move();
+                handleBoundary();
+                checkCollisions();
+                checkCollisionItems();
+                updateBounds(); // probably poorly implemented...
+                checkGameOver();
+            } else {
+                moveEnemies();
+            }
         } else {
-            moveEnemies();
+            clearAll();
         }
     }
 
 
     // MODIFIES: this
+    // EFFECTS: clears screen
+    private void clearAll() {
+        enemies.clear();
+        enemyBullets.clear();
+        playerBullets.clear();
+        items.clear();
+    }
+
+    // MODIFIES: this
     // EFFECTS:  turns player, fires bullets, depending on the keycode
-    public void handleKey(Set<Integer> keyCodes) {
-        if (keyCodes.contains(KeyEvent.VK_SPACE)) {
-            fireBullet();
-        } else {
-            playerControl(keyCodes);
+    public void handleKey(Integer keyCode) {
+        if (!invading) {
+            if (keyCode == KeyEvent.VK_SPACE) {
+                fireBullet();
+            } else {
+                playerControl(keyCode);
+            }
+        }
+    }
+
+    public void handleKeyReleased(Integer keyCode) {
+        if (keyCode == KeyEvent.VK_LEFT & player.getXdirection() == -1) {
+            player.setXdir(0);
+        } else if (keyCode == KeyEvent.VK_RIGHT & player.getXdirection() == 1) {
+            player.setXdir(0);
+        } else if (keyCode == KeyEvent.VK_UP & player.getYdirection() == -1) {
+            player.setYdir(0);
+        } else if (keyCode == KeyEvent.VK_DOWN & player.getYdirection() == 1) {
+            player.setYdir(0);
         }
     }
 
     // Controls the tank
     // modifies: this
     // effects: turns tank in response to key code 
-    private void playerControl(Set<Integer> keyCodes) {
-        if (keyCodes.contains(KeyEvent.VK_LEFT)) {
+    private void playerControl(Integer keyCode) {
+        if (keyCode == KeyEvent.VK_LEFT) {
             player.faceLeft();
-        }
-        if (keyCodes.contains(KeyEvent.VK_RIGHT)) {
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
             player.faceRight();
-        }
-        if (keyCodes.contains(KeyEvent.VK_UP)) {
+        } else if (keyCode == KeyEvent.VK_UP) {
             player.faceUp();
-        }
-        if (keyCodes.contains(KeyEvent.VK_DOWN)) {
+        } else if (keyCode == KeyEvent.VK_DOWN) {
             player.faceDown();
         }
-//        } else {
-//            player.resetDirection();
-//        }
     }
 
 
@@ -215,7 +248,8 @@ public class Game implements Writable {
     public void fireBullet() {
         for (Weapon w : inventory.getWeapons()) {
             if (w.canFire()) {
-                playerBullets.add(new Bullet(w.getSize(), true, player.getX(), player.getY()));
+                Bullet b = new Bullet(w.getSize(), true, player.getX(), player.getY());
+                playerBullets.add(b);
                 w.setCanFire(false);
                 w.restartTimer();
             }
@@ -246,18 +280,13 @@ public class Game implements Writable {
         if (player.getHealth() <= 0) {
             isGameOver = true;
         }
-        if (isGameOver) {
-            enemies.clear();
-            enemyBullets.clear();
-            playerBullets.clear();
-            items.clear();
-        }
     }
 
     // MODIFIES: this
     // EFFECTS: if the enemy has an item, set the coordinates of the item to the enemy's coordinates and add it to items
     private void dropItem(Enemy e) {
         Item item = e.getItem();
+        e.setItem(null);
         if (item == null) {
             return;
         } else {
@@ -267,53 +296,85 @@ public class Game implements Writable {
         }
     }
 
-    // MODIFIES: this
-    // EFFECTS: checks for collisions, updates player and enemy health accordingly. If enemy dies and it has an item,
-    // drop it, then remove enemy from the game.
+    // EFFECTS: checks for collisions
     private void checkCollisions() {
-        for (Bullet bullet : enemyBullets) {
-            if (bullet.collidedWith(player)) {
-                player.updateHealth(-bullet.getDamage());
+        checkPlayerCollision();
+        checkEnemyCollision();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: checks if player bullets have hit any enemy, reduce health accordingly and remove bullets. Also checks
+    // if player has hit any enemies, if so, set player health to 0
+    private void checkEnemyCollision() {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
+        List<Enemy> enemiesToRemove = new ArrayList<>();
+        for (Enemy enemy : enemies) {
+            if (player.collidedWith(enemy)) {
+                player.setHealth(0);
+                break;
             }
-        }
-        for (Bullet bullet : playerBullets) {
-            for (Enemy enemy : enemies) {
+            for (Bullet bullet : playerBullets) {
                 if (bullet.collidedWith(enemy)) {
+                    bulletsToRemove.add(bullet);
                     enemy.reduceHealth(bullet.getDamage());
                     if (enemy.getHealth() <= 0) {
                         dropItem(enemy);
                         score += enemy.getScore();
-                        enemies.remove(enemy);
+                        enemiesToRemove.add(enemy);
                     }
                 }
             }
         }
+        enemies.removeAll(enemiesToRemove);
+        playerBullets.removeAll(bulletsToRemove);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: checks if enemy bullets have collided with player, reduce health accordingly and remove bullets
+    private void checkPlayerCollision() {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
+        for (Bullet bullet : enemyBullets) {
+            if (bullet.collidedWith(player)) {
+                if (player.getHealth() - bullet.getDamage() < 0) {
+                    player.setHealth(0);
+                    break;
+                } else {
+                    player.updateHealth(-bullet.getDamage());
+                }
+                bulletsToRemove.add(bullet);
+            }
+        }
+        enemyBullets.removeAll(bulletsToRemove);
     }
 
     // MODIFIES: this
     // EFFECTS: if any item has collided with player, add it to corresponding list in inventory.
     private void checkCollisionItems() {
+        List<Item> itemsToRemove = new ArrayList<>();
         for (Item item : items) {
             if (item.collidedWith(player)) {
-                if (item.getIdentifier() == "Buff") {
+                itemsToRemove.add(item);
+                if (Objects.equals(item.getIdentifier(), "Buff")) {
                     Buff b = (Buff) item;
-                    inventory.addBuff(b);
                     player.updateStats(b);
                     if (b.getType() == 3) {
                         updateWeaponTimers();
                     }
                 } else {
+                    System.out.println(item.getIdentifier());
                     Weapon w = (Weapon) item;
                     w.setTimer(calcTimerDelay(w));
                     inventory.addWeapon((Weapon) item);
                 }
             }
         }
+        items.removeAll(itemsToRemove);
     }
 
     // EFFECTS: re-initializes all weapon timers with correct timer delay.
     private void updateWeaponTimers() {
         for (Weapon w : inventory.getWeapons()) {
+            w.stopTimer();
             w.setTimer(calcTimerDelay(w));
         }
     }
@@ -324,15 +385,17 @@ public class Game implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: chooses a random enemy to fire a bullet every update if not invading.
+    // EFFECTS: chooses a random enemy to fire a bullet if not invading
     private void enemyFire() {
-        int num = new Random().nextInt(enemies.size());
-        Enemy chosen = enemies.get(num);
-        int x = chosen.getX();
-        int y = chosen.getY();
-        Bullet b = new Bullet(chosen.getSize(), false, x, y);
-        b.setDirection(0, 1);
-        enemyBullets.add(b);
+        int num = new Random().nextInt(FIRE_PERIOD);
+        if (num < enemies.size()) {
+            Enemy chosen = enemies.get(num);
+            int x = chosen.getX();
+            int y = chosen.getY();
+            Bullet b = new Bullet(chosen.getSize(), false, x, y);
+            b.setDirection(0, 1);
+            enemyBullets.add(b);
+        }
     }
 
     // MODIFIES: this
@@ -364,7 +427,7 @@ public class Game implements Writable {
                 addEnemy(type, x, y);
             }
         }
-        for (int counter = 0; counter < 3; counter++) {
+        for (int counter = 0; counter < 100; counter++) {
             int num = new Random().nextInt(enemies.size());
             Enemy chosen = enemies.get(num);
             chosen.setItem(randomItem());
@@ -401,12 +464,11 @@ public class Game implements Writable {
                 }
                 break;
             case 1:
-                for (int y = xpos - 15; y <= xpos + 15; y += 30) {
-                    for (int x = ypos - 18; x <= ypos + 18; x += 36) {
+                for (int y = ypos - 15; y <= ypos + 15; y += 30) {
+                    for (int x = xpos - 18; x <= xpos + 18; x += 36) {
                         enemies.add(new Enemy("MEDIUM", x, y));
                     }
                 }
-                System.out.println("a;lsdkjf");
                 break;
             case 2:
                 enemies.add(new Enemy("LARGE", xpos, ypos));
@@ -422,19 +484,21 @@ public class Game implements Writable {
                 enemy.updateY(1);
             }
             lowest += 1;
-            if (lowest >= 230) {
+            if (lowest >= 240) {
                 invading = false;
             }
         } else {
-            if (rightmost > 770 || leftmost < 30) {
-                movementUnits = -movementUnits;
-            } else {
-                for (Enemy enemy : enemies) {
-                    enemy.updateX(movementUnits);
-                }
-                rightmost += movementUnits;
-                leftmost += movementUnits;
+            if (rightmost > 800) {
+                movementUnits = -1;
             }
+            if (leftmost < 0) {
+                movementUnits = 1;
+            }
+            for (Enemy enemy : enemies) {
+                enemy.updateX(movementUnits);
+            }
+            rightmost += movementUnits;
+            leftmost += movementUnits;
         }
     }
 
@@ -483,10 +547,47 @@ public class Game implements Writable {
     }
 
 
+    // EFFECTS: saves the game to file
+    public void saveGame() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(this);
+            jsonWriter.close();
+            System.out.println("Saved game to: " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads game from file
+    public void loadGame() {
+        try {
+            Game g = jsonReader.read();
+            score = g.score;
+            player = g.getPlayer();
+            inventory = player.getInventory();
+            invading = g.invading;
+            lowest = g.lowest;
+            leftmost = g.leftmost;
+            rightmost = g.rightmost;
+            movementUnits = g.movementUnits;
+            enemyBullets = g.enemyBullets;
+            playerBullets = g.playerBullets;
+            items = g.items;
+            enemies = g.enemies;
+            updateWeaponTimers();
+            System.out.println("Loaded game from: " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
     @Override
     // EFFECTS: returns game as json object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        json.put("score", score);
         json.put("player", player.toJson());
         json.put("inventory", inventory.toJson());
         json.put("invading", invading);
@@ -498,6 +599,7 @@ public class Game implements Writable {
         json.put("playerBullets", playerBulletsToJson());
         json.put("items", itemsToJson());
         json.put("enemies", enemiesToJson());
+        json.put("isGameOver", isGameOver);
         return json;
     }
 

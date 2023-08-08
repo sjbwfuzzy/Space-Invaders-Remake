@@ -8,6 +8,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class GamePanel extends JPanel {
     private static final String OVER = "Game Over!";
@@ -35,10 +36,10 @@ public class GamePanel extends JPanel {
     // MODIFIES: g
     // EFFECTS: draws the game
     private void drawGame(Graphics g) {
-        drawPlayer(g);
-        drawEnemies(g);
         drawBullets(g);
         drawItems(g);
+        drawEnemies(g);
+        drawPlayer(g);
     }
 
     // MODIFIES: g
@@ -100,7 +101,7 @@ public class GamePanel extends JPanel {
     // EFFECTS:  draws item i onto g
     private void drawItem(Graphics g, Item i) {
         Color savedCol = g.getColor();
-        if (i.getIdentifier() == "Buff") {
+        if (Objects.equals(i.getIdentifier(), "Buff")) {
             g.setColor(Buff.COLOR);
         } else {
             g.setColor(Weapon.COLOR);

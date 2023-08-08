@@ -103,14 +103,18 @@ public class Enemy implements Writable {
     }
 
     @Override
-    // EFFECTS: returns weapon as Json object
+    // EFFECTS: returns enemy as Json object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("health", health);
         json.put("xpos", getX());
         json.put("ypos", getY());
         json.put("size", size);
-        json.put("item", item.toJson());
+        if (item == null) {
+            json.put("item", JSONObject.NULL);
+        } else {
+            json.put("item", item.toJson());
+        }
         return json;
     }
 }

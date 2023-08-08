@@ -37,14 +37,17 @@ public class Bullet implements Writable {
                 damage = 9;
                 speed = 2;
                 radius = 12;
+                break;
             case "MEDIUM":
                 damage = 3;
                 speed = 4;
                 radius = 6;
+                break;
             case "SMALL":
                 damage = 1;
                 speed = 6;
                 radius = 3;
+                break;
         }
     }
 
@@ -74,6 +77,11 @@ public class Bullet implements Writable {
 
     public int getY() {
         return ypos;
+    }
+
+    // for testing
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     // MODIFIES: this

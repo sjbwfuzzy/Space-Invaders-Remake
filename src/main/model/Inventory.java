@@ -9,8 +9,8 @@ import java.util.Objects;
 
 // The inventory of a player, having money, list of Weapon, and list of Buff
 public class Inventory implements Writable {
-    private static final int MAX_WEAPONS = 3;
-    private static final int MAX_BUFFS = 5;
+    public static final int MAX_WEAPONS = 3;
+    public static final int MAX_BUFFS = 5;
 
     private int money;
     private ArrayList<Weapon> weapons;
@@ -55,7 +55,7 @@ public class Inventory implements Writable {
 
     // MODIFIES: this
     // EFFECTS: if inventory still has space for buff, return true and add buff. Else, return false
-    public boolean addBuff(Buff buff) {
+    protected boolean addBuff(Buff buff) {
         boolean canAdd = buffs.size() < MAX_BUFFS;
         if (canAdd) {
             buffs.add(buff);
@@ -65,7 +65,7 @@ public class Inventory implements Writable {
 
     // MODIFIES: this
     // EFFECTS: if buff is in buffs, remove it and return true. Else, return false
-    public boolean removeBuff(Buff buff) {
+    protected boolean removeBuff(Buff buff) {
         return buffs.remove(buff);
     }
 
@@ -91,6 +91,16 @@ public class Inventory implements Writable {
         return false;
     }
 
+    // EFFECTS: returns true if there is a weapon with given name, otherwise return false
+    public boolean containsWeapon(String name) {
+        for (Weapon weapon : weapons) {
+            if (Objects.equals(weapon.getName(), name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // REQUIRES: containsBuff(name) is true
     // EFFECTS: returns the first buff with given name
     public Buff getBuff(String name) {
@@ -99,8 +109,17 @@ public class Inventory implements Writable {
                 return buff;
             }
         }
-        // this should never be reached, as the game should always check that containsBuff(name) is true before
-        // attempting to call getBuff(name).
+        return null;
+    }
+
+    // REQUIRES: containsWeapon(name) is true
+    // EFFECTS: returns the first weapon with given name
+    public Weapon getWeapon(String name) {
+        for (Weapon weapon : weapons) {
+            if (Objects.equals(weapon.getName(), name)) {
+                return weapon;
+            }
+        }
         return null;
     }
 

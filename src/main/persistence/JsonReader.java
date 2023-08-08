@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class JsonReader {
@@ -42,8 +43,9 @@ public class JsonReader {
 
     private Game parseGame(JSONObject jsonObject) {
         Game g = new Game();
-        g.setPlayer(parsePlayer(jsonObject));
-        g.setInventory(parseInventory(jsonObject));
+        g.setPlayer(parsePlayer(jsonObject.getJSONObject("player")));
+        g.setInventory(parseInventory(jsonObject.getJSONObject("inventory")));
+        g.setScore(jsonObject.getInt("score"));
         g.setInvading(jsonObject.getBoolean("invading"));
         g.setLowest(jsonObject.getInt("lowest"));
         g.setLeftmost(jsonObject.getInt("leftmost"));
@@ -53,6 +55,7 @@ public class JsonReader {
         g.setPlayerBullets(parsePlayerBullets(jsonObject.getJSONArray("playerBullets")));
         g.setItems(parseItems(jsonObject.getJSONArray("items")));
         g.setEnemies(parseEnemies(jsonObject.getJSONArray("enemies")));
+        g.setGameOver(jsonObject.getBoolean("isGameOver"));
 
         return g;
     }
@@ -62,7 +65,12 @@ public class JsonReader {
         Enemy e = new Enemy(jsonObject.getString("size"), jsonObject.getInt("xpos"),
                 jsonObject.getInt("ypos"));
         e.setHealth(jsonObject.getInt("health"));
-        e.setItem(parseItem(jsonObject.getJSONObject("item")));
+        try {
+            e.setItem(parseItem(jsonObject.getJSONObject("item")));
+
+        } catch (Exception exception) {
+            e.setItem(null);
+        }
         return e;
     }
 
@@ -86,9 +94,9 @@ public class JsonReader {
 
     // EFFECTS: parses JSONObject as either a buff or a weapon depending on the identifier
     private Item parseItem(JSONObject jsonObject) {
-        if (jsonObject.getString("identifier") == "Buff") {
+        if (Objects.equals(jsonObject.getString("identifier"), "Buff")) {
             return parseBuff(jsonObject);
-        } else if (jsonObject.getString("identifier") == "Weapon") {
+        } else if (Objects.equals(jsonObject.getString("identifier"), "Weapon")) {
             return parseWeapon(jsonObject);
         }
         return null;

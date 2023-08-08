@@ -12,17 +12,13 @@ class BuffTest {
 
     @BeforeEach
     void runBefore() {
-        ArrayList<Integer> modifiers = new ArrayList<>();
-        modifiers.add(3);
-        modifiers.add(-1);
-        modifiers.add(-11);
-        modifiers.add(-20);
-        testBuff = new Buff("testBuff", modifiers);
+        testBuff = new Buff(0, 0, 0);
     }
 
     @Test
     void testConstructor() {
-        assertEquals("testBuff", testBuff.getName());
+        testBuff = new Buff(0, 0, 0);
+        assertEquals("Increase Max Health", testBuff.getName());
         assertEquals(4, testBuff.getModifiers().size());
 
         assertEquals(3, testBuff.getOneModifier(0));
