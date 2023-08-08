@@ -1,6 +1,5 @@
 package model;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -38,7 +37,6 @@ public class Buff extends Item implements Writable {
             case 3:
                 name = "Increase Fire Rate";
                 modifiers.set(3, 10);
-                break;
         }
     }
 

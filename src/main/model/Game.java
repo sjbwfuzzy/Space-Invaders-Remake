@@ -48,6 +48,7 @@ public class Game implements Writable {
         jsonReader = new JsonReader(JSON_STORE);
         enemyBullets = new ArrayList<>();
         playerBullets = new ArrayList<>();
+        keysPressed = new HashSet<>();
         items = new ArrayList<>();
         enemies = new ArrayList<>();
         setUp();
@@ -175,11 +176,13 @@ public class Game implements Writable {
                 setupEnemies();
             }
             if (!invading) {
-                enemyFire();
+//                enemyFire();
                 moveBullets();
                 moveEnemies();
                 moveItems();
                 player.move();
+                fireBullet();
+                stopPlayer();
                 handleBoundary();
                 checkCollisions();
                 checkCollisionItems();
@@ -193,6 +196,14 @@ public class Game implements Writable {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: if no keys pressed then stop player
+    private void stopPlayer() {
+        if (keysPressed.size() == 0 || (keysPressed.size() == 1 & keysPressed.contains(KeyEvent.VK_SPACE))) {
+            player.setYdir(0);
+            player.setXdir(0);
+        }
+    }
 
     // MODIFIES: this
     // EFFECTS: clears screen
@@ -206,40 +217,47 @@ public class Game implements Writable {
     // MODIFIES: this
     // EFFECTS:  turns player, fires bullets, depending on the keycode
     public void handleKey(Integer keyCode) {
-        if (!invading) {
-            if (keyCode == KeyEvent.VK_SPACE) {
-                fireBullet();
-            } else {
-                playerControl(keyCode);
-            }
-        }
-    }
-
-    public void handleKeyReleased(Integer keyCode) {
-        if (keyCode == KeyEvent.VK_LEFT & player.getXdirection() == -1) {
-            player.setXdir(0);
-        } else if (keyCode == KeyEvent.VK_RIGHT & player.getXdirection() == 1) {
-            player.setXdir(0);
-        } else if (keyCode == KeyEvent.VK_UP & player.getYdirection() == -1) {
-            player.setYdir(0);
-        } else if (keyCode == KeyEvent.VK_DOWN & player.getYdirection() == 1) {
-            player.setYdir(0);
+        if (keyCode == KeyEvent.VK_SPACE
+                || keyCode == KeyEvent.VK_LEFT
+                || keyCode == KeyEvent.VK_RIGHT
+                || keyCode == KeyEvent.VK_UP
+                || keyCode == KeyEvent.VK_DOWN) {
+            keysPressed.add(keyCode);
+            System.out.println("keys pressed" + keysPressed);
+            playerControl();
         }
     }
 
     // Controls the tank
     // modifies: this
-    // effects: turns tank in response to key code 
-    private void playerControl(Integer keyCode) {
-        if (keyCode == KeyEvent.VK_LEFT) {
-            player.faceLeft();
-        } else if (keyCode == KeyEvent.VK_RIGHT) {
-            player.faceRight();
-        } else if (keyCode == KeyEvent.VK_UP) {
-            player.faceUp();
-        } else if (keyCode == KeyEvent.VK_DOWN) {
-            player.faceDown();
+    // effects: turns tank in response what keys are in keysPressed
+    private void playerControl() {
+        if (!invading) {
+            if (keysPressed.contains(KeyEvent.VK_LEFT)) {
+                player.faceLeft();
+            }
+            if (keysPressed.contains(KeyEvent.VK_RIGHT)) {
+                player.faceRight();
+            }
+            if (keysPressed.contains(KeyEvent.VK_UP)) {
+                player.faceUp();
+            }
+            if (keysPressed.contains(KeyEvent.VK_DOWN)) {
+                player.faceDown();
+            }
         }
+    }
+
+    public void handleKeyReleased(Integer keyCode) {
+        System.out.println("released" + keyCode);
+        keysPressed.remove(keyCode);
+        if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT) {
+            player.setXdir(0);
+        }
+        if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN) {
+            player.setYdir(0);
+        }
+        playerControl();
     }
 
 
@@ -247,7 +265,7 @@ public class Game implements Writable {
     // EFFECTS: for each weapon in inventory, if the weapon can fire, fire, set canFire to false, and restart the timer.
     public void fireBullet() {
         for (Weapon w : inventory.getWeapons()) {
-            if (w.canFire()) {
+            if (w.canFire() && keysPressed.contains(KeyEvent.VK_SPACE)) {
                 Bullet b = new Bullet(w.getSize(), true, player.getX(), player.getY());
                 playerBullets.add(b);
                 w.setCanFire(false);
@@ -361,7 +379,6 @@ public class Game implements Writable {
                         updateWeaponTimers();
                     }
                 } else {
-                    System.out.println(item.getIdentifier());
                     Weapon w = (Weapon) item;
                     w.setTimer(calcTimerDelay(w));
                     inventory.addWeapon((Weapon) item);
