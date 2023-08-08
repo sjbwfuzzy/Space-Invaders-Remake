@@ -41,6 +41,10 @@ class PlayerTest {
 
         assertEquals(0, testPlayer.getExperience());
         assertEquals(1, testPlayer.getLevel());
+        assertEquals(10, testPlayer.getHealth());
+        testPlayer.updateHealth(10);
+        assertEquals(20, testPlayer.getHealth());
+
     }
 
     @Test
@@ -124,5 +128,23 @@ class PlayerTest {
         testPlayer.move();
         assertEquals(10, testPlayer.getX());
         assertEquals(0, testPlayer.getY());
+    }
+
+    @Test
+    void testCollision() {
+        Enemy e = new Enemy("LARGE", 0, 0);
+        assertTrue(testPlayer.collidedWith(e));
+        e.updateX(100);
+        assertFalse(testPlayer.collidedWith(e));
+    }
+
+    @Test
+    void testDirection() {
+        testPlayer.setY(1);
+        assertEquals(1, testPlayer.getY());
+        testPlayer.setXdir(1);
+        assertEquals(1, testPlayer.getXdirection());
+        testPlayer.setYdir(1);
+        assertEquals(1, testPlayer.getYdirection());
     }
 }

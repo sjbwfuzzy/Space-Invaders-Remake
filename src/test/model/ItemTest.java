@@ -16,6 +16,10 @@ public class ItemTest {
         assertEquals(0, buff.getY());
         assertEquals("Buff", buff.getIdentifier());
         assertEquals("Increase Max Health", buff.getName());
+        weapon.setX(1);
+        weapon.setY(1);
+        assertEquals(1, weapon.getX());
+        assertEquals(1, weapon.getY());
     }
 
     @Test

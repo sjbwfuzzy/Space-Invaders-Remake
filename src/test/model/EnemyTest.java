@@ -20,4 +20,18 @@ public class EnemyTest {
         assertEquals(0, te.getX());
         assertEquals(0, te.getY());
     }
+
+    @Test
+    void testUpdateX() {
+        te.updateX(1);
+        assertEquals(1, te.getX());
+    }
+
+    @Test
+    void testHealth() {
+        te.setHealth(7);
+        assertEquals(7, te.getHealth());
+        te.reduceHealth(1);
+        assertEquals(6, te.getHealth());
+    }
 }

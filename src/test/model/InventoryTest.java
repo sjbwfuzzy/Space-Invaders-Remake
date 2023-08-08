@@ -137,4 +137,15 @@ class InventoryTest {
         // this should never really be reached, I'm just adding this test for code coverage
         assertNotEquals(buff1, i.getBuff("buff3"));
     }
+
+    @Test
+    void testGetWeapon() {
+        i.addWeapon(w1);
+        i.addWeapon(w2);
+        assertEquals(w1, i.getWeapon("Large Gun"));
+        assertEquals(w2, i.getWeapon("Small Gun"));
+
+        // this should never really be reached, I'm just adding this test for code coverage
+        assertNotEquals(w1, i.getWeapon("asdf"));
+    }
 }

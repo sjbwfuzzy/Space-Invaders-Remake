@@ -22,6 +22,8 @@ class WeaponTest {
         assertEquals("SMALL", testWeapon.getSize());
         assertEquals("Weapon", testWeapon.getIdentifier());
         assertEquals(3, testWeapon.getFireRate());
+        testWeapon.setCanFire(false);
+        assertFalse(testWeapon.canFire());
     }
 
     @Test
