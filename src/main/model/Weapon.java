@@ -57,16 +57,8 @@ public class Weapon extends Item implements Writable {
         timer.start();
     }
 
-    // MODIFIES: this
-    // EFFECTS: restarts the timer
-    public void restartTimer() {
-        timer.restart();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: stops the timer
-    public void stopTimer() {
-        timer.stop();
+    public Timer getTimer() {
+        return timer;
     }
 
     public int getFireRate() {

@@ -1,33 +1,74 @@
 {
-  "stats": [
-    11,
-    3,
-    13,
-    104
-  ],
-  "level": 1,
-  "experience": 0,
-  "inventory": {
-    "money": 150,
-    "buffs": [{
-      "name": "buff1",
-      "modifiers": [
-        1,
-        2,
-        3,
-        4
-      ]
-    }],
-    "weapons": [{
-      "fireRate": 15,
-      "bulletType": {
-        "damage": 1,
-        "penetration": 1,
-        "radius": 1,
-        "speed": 1,
-        "mybullet": true
-      },
-      "name": "weapon1"
-    }]
-  }
+    "invading": false,
+    "enemyBullets": [],
+    "enemies": [],
+    "inventory": {
+        "money": 150,
+        "buffs": [{
+            "identifier": "Buff",
+            "ypos": 0,
+            "xpos": 0,
+            "type": 0
+        }],
+        "weapons": [
+            {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            },
+            {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "MEDIUM"
+            }
+        ]
+    },
+    "lowest": 0,
+    "movementUnits": 1,
+    "score": 0,
+    "leftmost": 0,
+    "isGameOver": false,
+    "rightmost": 0,
+    "items": [],
+    "player": {
+        "ypos": 560,
+        "xpos": 400,
+        "stats": [
+            13,
+            1,
+            2,
+            100
+        ],
+        "level": 1,
+        "health": 10,
+        "experience": 0,
+        "ydir": 0,
+        "inventory": {
+            "money": 150,
+            "buffs": [{
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 0
+            }],
+            "weapons": [
+                {
+                    "identifier": "Weapon",
+                    "ypos": 0,
+                    "xpos": 0,
+                    "size": "SMALL"
+                },
+                {
+                    "identifier": "Weapon",
+                    "ypos": 0,
+                    "xpos": 0,
+                    "size": "MEDIUM"
+                }
+            ]
+        },
+        "xdir": 0
+    },
+    "playerBullets": []
 }

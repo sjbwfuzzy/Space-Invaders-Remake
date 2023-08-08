@@ -79,15 +79,11 @@ public class Bullet implements Writable {
         return ypos;
     }
 
-    // for testing
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setXdirection(int xdirection) {
+        this.xdirection = xdirection;
     }
 
-    // MODIFIES: this
-    // EFFECTS: sets xdirection and ydirection
-    public void setDirection(int xdirection, int ydirection) {
-        this.xdirection = xdirection;
+    public void setYdirection(int ydirection) {
         this.ydirection = ydirection;
     }
 

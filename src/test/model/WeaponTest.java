@@ -11,21 +11,24 @@ class WeaponTest {
 
     @BeforeEach
     void runBefore() {
-        b1 = new Bullet(1, 2, 3, 4, true);
-        testWeapon = new Weapon("w1", 55, b1);
+        testWeapon = new Weapon("SMALL", 0, 0);
     }
 
     @Test
     void testConstructor() {
-        assertEquals(55, testWeapon.getFireRate());
-        assertEquals("w1", testWeapon.getName());
-        assertEquals(b1, testWeapon.getBullet());
+        assertTrue(testWeapon.canFire());
+        assertEquals(3, testWeapon.getFireRate());
+        assertEquals("Small Gun", testWeapon.getName());
+        assertEquals("SMALL", testWeapon.getSize());
+        assertEquals("Weapon", testWeapon.getIdentifier());
+        assertEquals(3, testWeapon.getFireRate());
     }
 
     @Test
-    void testSetFirerate() {
-        testWeapon.setFireRate(55);
-        assertEquals(55, testWeapon.getFireRate());
+    void testSetTimer() {
+        assertEquals(100000000, testWeapon.getTimer().getDelay());
+        testWeapon.setTimer(100);
+        assertEquals(100, testWeapon.getTimer().getDelay());
     }
 
 }

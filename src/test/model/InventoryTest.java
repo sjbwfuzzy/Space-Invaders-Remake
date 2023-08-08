@@ -4,17 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryTest {
-    private Inventory testInventory;
+    private Inventory i;
     private Weapon w1;
     private Weapon w2;
     private Buff buff1;
     private Buff buff2;
-    private Bullet b1;
 
     @BeforeEach
     void runBefore() {
@@ -22,122 +20,121 @@ class InventoryTest {
         ArrayList<Weapon> weapons = new ArrayList<>();
         ArrayList<Buff> buffs = new ArrayList<>();
 
-        testInventory = new Inventory(money, weapons, buffs);
-        buff1 = new Buff("buff1", new ArrayList<>());
-        buff2 = new Buff("buff2", new ArrayList<>());
-        b1 = new Bullet(1,2, 3, 4, true);
-        w1 = new Weapon("w1", 5, b1);
-        w2 = new Weapon("w2", 10, b1);
-
+        i = new Inventory(money, weapons, buffs);
+        buff1 = new Buff(0, 0, 0);
+        buff2 = new Buff(3, 1, 1);
+        w1 = new Weapon("LARGE", 2, 2);
+        w2 = new Weapon("SMALL", 3, 3);
     }
 
     @Test
     void testConstructor() {
-        assertEquals(0, testInventory.getMoney());
-        assertEquals(0, testInventory.getBuffs().size());
-        assertEquals(0, testInventory.getWeapons().size());
+        assertEquals(0, i.getMoney());
+        assertEquals(0, i.getBuffs().size());
+        assertEquals(0, i.getWeapons().size());
     }
 
     @Test
     void testAddMoney() {
-        testInventory.addMoney(5);
-        assertEquals(5, testInventory.getMoney());
-        testInventory.addMoney(10);
-        assertEquals(15, testInventory.getMoney());
+        i.addMoney(5);
+        assertEquals(5, i.getMoney());
+        i.addMoney(10);
+        assertEquals(15, i.getMoney());
     }
 
     @Test
     void testRemoveMoney() {
-        testInventory.addMoney(15);
+        i.addMoney(15);
 
-        testInventory.removeMoney(5);
-        assertEquals(10, testInventory.getMoney());
-        testInventory.removeMoney(10);
-        assertEquals(0, testInventory.getMoney());
+        i.removeMoney(5);
+        assertEquals(10, i.getMoney());
+        i.removeMoney(10);
+        assertEquals(0, i.getMoney());
     }
 
     @Test
     void testAddWeapon() {
-        assertTrue(testInventory.addWeapon(w1));
-        assertEquals(1, testInventory.getWeapons().size());
-        assertTrue(testInventory.getWeapons().contains(w1));
+        assertTrue(i.addWeapon(w1));
+        assertEquals(1, i.getWeapons().size());
+        assertTrue(i.getWeapons().contains(w1));
 
-        assertTrue(testInventory.addWeapon(w2));
-        assertEquals(2, testInventory.getWeapons().size());
-        assertTrue(testInventory.getWeapons().contains(w2));
+        assertTrue(i.addWeapon(w2));
+        assertEquals(2, i.getWeapons().size());
+        assertTrue(i.getWeapons().contains(w2));
 
-        assertTrue(testInventory.addWeapon(w2));
-        assertFalse(testInventory.addWeapon(w2));
+        assertTrue(i.addWeapon(w2));
+        assertFalse(i.addWeapon(w2));
     }
 
     @Test
     void testRemoveWeapon() {
-        assertFalse(testInventory.removeWeapon(w1));
+        assertFalse(i.removeWeapon(w1));
 
-        testInventory.addWeapon(w1);
-        testInventory.addWeapon(w2);
+        i.addWeapon(w1);
+        i.addWeapon(w2);
 
-        assertTrue(testInventory.removeWeapon(w1));
-        assertEquals(1, testInventory.getWeapons().size());
-        assertTrue(testInventory.getWeapons().contains(w2));
+        assertTrue(i.removeWeapon(w1));
+        assertEquals(1, i.getWeapons().size());
+        assertTrue(i.getWeapons().contains(w2));
 
-        assertTrue(testInventory.removeWeapon(w2));
-        assertEquals(0, testInventory.getWeapons().size());
+        assertTrue(i.removeWeapon(w2));
+        assertEquals(0, i.getWeapons().size());
     }
 
     @Test
     void testAddBuff() {
-        assertTrue(testInventory.addBuff(buff1));
-        assertEquals(1, testInventory.getBuffs().size());
-        assertTrue(testInventory.getBuffs().contains(buff1));
+        assertTrue(i.addBuff(buff1));
+        assertEquals(1, i.getBuffs().size());
+        assertTrue(i.getBuffs().contains(buff1));
 
-        assertTrue(testInventory.addBuff(buff2));
-        assertEquals(2, testInventory.getBuffs().size());
-        assertTrue(testInventory.getBuffs().contains(buff2));
+        assertTrue(i.addBuff(buff2));
+        assertEquals(2, i.getBuffs().size());
+        assertTrue(i.getBuffs().contains(buff2));
 
-        testInventory.addBuff(buff1);
-        testInventory.addBuff(buff2);
-        assertTrue(testInventory.addBuff(buff1));
-        assertFalse(testInventory.addBuff(buff1));
+        i.addBuff(buff1);
+        i.addBuff(buff2);
+        assertTrue(i.addBuff(buff1));
+        assertFalse(i.addBuff(buff1));
     }
 
     @Test
     void testRemoveBuff() {
-        assertFalse(testInventory.removeBuff(buff1));
-        testInventory.addBuff(buff1);
-        testInventory.addBuff(buff2);
+        assertFalse(i.removeBuff(buff1));
+        i.addBuff(buff1);
+        i.addBuff(buff2);
 
-        assertTrue(testInventory.removeBuff(buff1));
-        assertEquals(1, testInventory.getBuffs().size());
-        assertTrue(testInventory.getBuffs().contains(buff2));
+        assertTrue(i.removeBuff(buff1));
+        assertEquals(1, i.getBuffs().size());
+        assertTrue(i.getBuffs().contains(buff2));
 
-        assertTrue(testInventory.removeBuff(buff2));
-        assertEquals(0, testInventory.getBuffs().size());
+        assertTrue(i.removeBuff(buff2));
+        assertEquals(0, i.getBuffs().size());
     }
 
     @Test
     void testContainsBuff() {
-        assertFalse(testInventory.containsBuff("buff1"));
-        testInventory.addBuff(buff1);
-        assertTrue(testInventory.containsBuff("buff1"));
-        assertFalse(testInventory.containsBuff("buff2"));
+        assertFalse(i.containsBuff("Increase Max Health"));
+        i.addBuff(buff1);
+        assertTrue(i.containsBuff("Increase Max Health"));
+        assertEquals(1, i.getBuffs().size());
+    }
+
+    @Test
+    void testContainsWeapon() {
+        assertFalse(i.containsWeapon("Small Gun"));
+        i.addWeapon(w2);
+        assertTrue(i.containsWeapon("Small Gun"));
+        assertEquals(1, i.getWeapons().size());
     }
 
     @Test
     void testGetBuff() {
-        testInventory.addBuff(buff1);
-        testInventory.addBuff(buff2);
-        ArrayList<Integer> testModifiers = new ArrayList<>();
-        testModifiers.add(3);
-        testModifiers.add(-1);
-        testModifiers.add(-11);
-        testModifiers.add(-20);
-        testInventory.addBuff(new Buff("buff1", testModifiers));
-
-        assertEquals(buff1, testInventory.getBuff("buff1"));
-        assertEquals(buff2, testInventory.getBuff("buff2"));
+        i.addBuff(buff1);
+        i.addBuff(buff2);
+        assertEquals(buff1, i.getBuff("Increase Max Health"));
+        assertEquals(buff2, i.getBuff("Increase Fire Rate"));
 
         // this should never really be reached, I'm just adding this test for code coverage
-        assertNotEquals(buff1, testInventory.getBuff("buff3"));
+        assertNotEquals(buff1, i.getBuff("buff3"));
     }
 }

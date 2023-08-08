@@ -1,15 +1,48 @@
 {
-    "stats": [
-        10,
-        1,
-        10,
-        100
-    ],
-    "level": 1,
-    "experience": 0,
+    "invading": false,
+    "enemyBullets": [],
+    "enemies": [],
     "inventory": {
         "money": 0,
         "buffs": [],
-        "weapons": []
-    }
+        "weapons": [{
+            "identifier": "Weapon",
+            "ypos": 0,
+            "xpos": 0,
+            "size": "SMALL"
+        }]
+    },
+    "lowest": 0,
+    "movementUnits": 1,
+    "score": 0,
+    "leftmost": 0,
+    "isGameOver": false,
+    "rightmost": 0,
+    "items": [],
+    "player": {
+        "ypos": 560,
+        "xpos": 400,
+        "stats": [
+            10,
+            1,
+            2,
+            100
+        ],
+        "level": 1,
+        "health": 10,
+        "experience": 0,
+        "ydir": 0,
+        "inventory": {
+            "money": 0,
+            "buffs": [],
+            "weapons": [{
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            }]
+        },
+        "xdir": 0
+    },
+    "playerBullets": []
 }

@@ -34,6 +34,7 @@ public class Game implements Writable {
     private int score;
     private Boolean invading;
     private Set<Integer> keysPressed;
+    private int regen;
 
     // used for enemy related actions
     private int lowest;
@@ -167,6 +168,10 @@ public class Game implements Writable {
         this.movementUnits = movementUnits;
     }
 
+    public Set<Integer> getKeysPressed() {
+        return keysPressed;
+    }
+
     // MODIFIES: this
     // EFFECTS:  updates player, bullets and enemies if there are still enemies, else do the invading sequence
     public void update() {
@@ -176,23 +181,36 @@ public class Game implements Writable {
                 setupEnemies();
             }
             if (!invading) {
-//                enemyFire();
+                enemyFire();
                 moveBullets();
                 moveEnemies();
                 moveItems();
-                player.move();
-                fireBullet();
-                stopPlayer();
+                updatePlayer();
                 handleBoundary();
                 checkCollisions();
                 checkCollisionItems();
-                updateBounds(); // probably poorly implemented...
+                updateBounds();
                 checkGameOver();
             } else {
                 moveEnemies();
             }
         } else {
             clearAll();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: updates player related actions
+    private void updatePlayer() {
+        player.move();
+        fireBullet();
+        stopPlayer();
+        regen += 1;
+        if (regen >= 1000) {
+            if (player.getHealth() < player.getMaxHealth()) {
+                player.updateHealth(1);
+            }
+            regen = 0;
         }
     }
 
@@ -223,7 +241,6 @@ public class Game implements Writable {
                 || keyCode == KeyEvent.VK_UP
                 || keyCode == KeyEvent.VK_DOWN) {
             keysPressed.add(keyCode);
-            System.out.println("keys pressed" + keysPressed);
             playerControl();
         }
     }
@@ -249,7 +266,6 @@ public class Game implements Writable {
     }
 
     public void handleKeyReleased(Integer keyCode) {
-        System.out.println("released" + keyCode);
         keysPressed.remove(keyCode);
         if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT) {
             player.setXdir(0);
@@ -263,21 +279,22 @@ public class Game implements Writable {
 
     // MODIFIES: this
     // EFFECTS: for each weapon in inventory, if the weapon can fire, fire, set canFire to false, and restart the timer.
-    public void fireBullet() {
+    private void fireBullet() {
         for (Weapon w : inventory.getWeapons()) {
             if (w.canFire() && keysPressed.contains(KeyEvent.VK_SPACE)) {
                 Bullet b = new Bullet(w.getSize(), true, player.getX(), player.getY());
                 playerBullets.add(b);
                 w.setCanFire(false);
-                w.restartTimer();
+                w.getTimer().restart();
             }
+
         }
     }
 
     // MODIFIES: this
     // EFFECTS: updates leftmost and rightmost values
     private void updateBounds() {
-        int min = 800;
+        int min = WIDTH;
         int max = 0;
         for (Enemy e : enemies) {
             int ex = e.getX();
@@ -391,7 +408,7 @@ public class Game implements Writable {
     // EFFECTS: re-initializes all weapon timers with correct timer delay.
     private void updateWeaponTimers() {
         for (Weapon w : inventory.getWeapons()) {
-            w.stopTimer();
+            w.getTimer().stop();
             w.setTimer(calcTimerDelay(w));
         }
     }
@@ -410,7 +427,8 @@ public class Game implements Writable {
             int x = chosen.getX();
             int y = chosen.getY();
             Bullet b = new Bullet(chosen.getSize(), false, x, y);
-            b.setDirection(0, 1);
+            b.setYdirection(1);
+            b.setXdirection(0);
             enemyBullets.add(b);
         }
     }
@@ -444,7 +462,7 @@ public class Game implements Writable {
                 addEnemy(type, x, y);
             }
         }
-        for (int counter = 0; counter < 100; counter++) {
+        for (int counter = 0; counter < 5; counter++) {
             int num = new Random().nextInt(enemies.size());
             Enemy chosen = enemies.get(num);
             chosen.setItem(randomItem());

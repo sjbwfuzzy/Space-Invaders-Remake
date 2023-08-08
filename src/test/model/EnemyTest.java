@@ -7,16 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EnemyTest {
-    private Enemy testEnemy;
+    private Enemy te;
 
     @BeforeEach
     void runBefore() {
-        testEnemy = new Enemy(Size.SMALL, 1, 1);
+        te = new Enemy("SMALL", 0, 0);
     }
 
     @Test
     void testConstructor() {
-        testEnemy.reduceHealth(1);
-        assertEquals(10, testEnemy.getScore());
+        assertEquals("SMALL", te.getSize());
+        assertEquals(0, te.getX());
+        assertEquals(0, te.getY());
     }
 }

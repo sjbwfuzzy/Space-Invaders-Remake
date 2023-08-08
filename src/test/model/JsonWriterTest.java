@@ -13,24 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 // Inspiration from https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
 public class JsonWriterTest {
-    Player p;
+    Game g;
 
     @BeforeEach
     void runBefore() {
-        ArrayList<Integer> stats = new ArrayList<>(4);
-        stats.add(10); //max health
-        stats.add(1); //bonus attack
-        stats.add(10); //speed
-        stats.add(100); //fire rate (percentage)
-
-        int experience = 0;
-        int level = 1;
-
-        int money = 0;
-        ArrayList<Weapon> weapons = new ArrayList<>();
-        ArrayList<Buff> buffs = new ArrayList<>();
-
-        p = new Player(stats, experience, level, new Inventory(money, weapons, buffs));
+        g = new Game();
     }
 
     @Test
@@ -49,20 +36,21 @@ public class JsonWriterTest {
         try {
             JsonWriter writer = new JsonWriter("./data/testWriterInitialGame.json");
             writer.open();
-            writer.write(p);
+            writer.write(g);
             writer.close();
 
             JsonReader reader = new JsonReader("./data/testWriterInitialGame.json");
-            p = reader.read();
+            g = reader.read();
+            Player p = g.getPlayer();
             assertEquals(10, p.getMaxHealth());
             assertEquals(1, p.getBonusAttack());
-            assertEquals(10, p.getSpeed());
+            assertEquals(2, p.getSpeed());
             assertEquals(100, p.getFireRate());
             assertEquals(0, p.getExperience());
             assertEquals(1, p.getLevel());
             assertEquals(0, p.getInventory().getMoney());
             assertEquals(0, p.getInventory().getBuffs().size());
-            assertEquals(0, p.getInventory().getWeapons().size());
+            assertEquals(1, p.getInventory().getWeapons().size());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -72,58 +60,50 @@ public class JsonWriterTest {
     void testWriterGeneralGame() {
         try {
             JsonWriter writer = new JsonWriter("./data/testWriterInitialGame.json");
-            p.addLevel(10);
-            p.addExperience(10);
+            g.getPlayer().addLevel(10);
+            g.getPlayer().addExperience(10);
 
-            ArrayList<Integer> modifiers = new ArrayList<>(4);
-            modifiers.add(1);
-            modifiers.add(2);
-            modifiers.add(3);
-            modifiers.add(4);
-            Buff buff1 = new Buff("buff1", modifiers);
+            Buff buff1 = new Buff(0, 0, 0);
+            buff1.setOneModifier(0, 1);
+            buff1.setOneModifier(1, 2);
+            buff1.setOneModifier(2, 3);
+            buff1.setOneModifier(3, 4);
 
-            p.updateStats(buff1);
+            g.getPlayer().updateStats(buff1);
 
-            Bullet bullet = new Bullet(1,2, 3, 4, true);
-            Weapon weapon1 = new Weapon("weapon1", 10, bullet);
+            Weapon weapon1 = new Weapon("SMALL", 0, 0);
 
-            p.getInventory().addWeapon(weapon1);
+            g.getInventory().addWeapon(weapon1);
 
-            p.getInventory().addMoney(10);
+            g.getInventory().addMoney(10);
 
             writer.open();
-            writer.write(p);
+            writer.write(g);
             writer.close();
 
             JsonReader reader = new JsonReader("./data/testWriterInitialGame.json");
-            p = reader.read();
+            g = reader.read();
+            Player p = g.getPlayer();
             assertEquals(11, p.getMaxHealth());
             assertEquals(3, p.getBonusAttack());
-            assertEquals(13, p.getSpeed());
+            assertEquals(5, p.getSpeed());
             assertEquals(104, p.getFireRate());
             assertEquals(10, p.getExperience());
             assertEquals(11, p.getLevel());
             assertEquals(10, p.getInventory().getMoney());
             assertEquals(1, p.getInventory().getBuffs().size());
-            assertEquals(1, p.getInventory().getWeapons().size());
+            assertEquals(2, p.getInventory().getWeapons().size());
 
             assertEquals(1, p.getInventory().getBuffs().size());
-            assertEquals("buff1", buff1.getName());
+            assertEquals("Increase Max Health", buff1.getName());
             assertEquals(1, buff1.getOneModifier(0));
             assertEquals(2, buff1.getOneModifier(1));
             assertEquals(3, buff1.getOneModifier(2));
             assertEquals(4, buff1.getOneModifier(3));
 
-            assertEquals(1, p.getInventory().getWeapons().size());
-            assertEquals("weapon1", weapon1.getName());
-            assertEquals(10, weapon1.getFireRate());
-
-            assertEquals(4, bullet.getRadius());
-            assertEquals(1, bullet.getDamage());
-            assertEquals(3, bullet.getPenetration());
-            assertEquals(2, bullet.getSpeed());
-            assertTrue(bullet.isMybullet());
-
+            assertEquals(2, g.getInventory().getWeapons().size());
+            assertEquals("Small Gun", weapon1.getName());
+            assertEquals(3, weapon1.getFireRate());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }

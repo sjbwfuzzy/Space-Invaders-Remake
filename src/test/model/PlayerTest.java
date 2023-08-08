@@ -28,7 +28,8 @@ class PlayerTest {
         ArrayList<Buff> buffs = new ArrayList<>();
 
         Inventory inventory = new Inventory(money, weapons, buffs);
-        testPlayer = new Player(stats, experience, level, inventory);
+        testPlayer = new Player(stats, experience,
+                level, inventory, 0, 0);
     }
 
     @Test
@@ -44,12 +45,10 @@ class PlayerTest {
 
     @Test
     void testUpdateStats() {
-        ArrayList<Integer> testModifiers = new ArrayList<>();
-        testModifiers.add(3);
-        testModifiers.add(-1);
-        testModifiers.add(-11);
-        testModifiers.add(-20);
-        Buff testBuff = new Buff("test", testModifiers);
+        Buff testBuff = new Buff(0, 0, 0);
+        testBuff.setOneModifier(1, -1);
+        testBuff.setOneModifier(2, -11);
+        testBuff.setOneModifier(3, -20);
         assertTrue(testPlayer.updateStats(testBuff));
         assertEquals(13, testPlayer.getMaxHealth());
         assertEquals(1, testPlayer.getBonusAttack());
@@ -69,17 +68,14 @@ class PlayerTest {
         testPlayer.updateStats(testBuff);
         assertTrue(testPlayer.updateStats(testBuff));
         assertFalse(testPlayer.updateStats(testBuff));
-
     }
 
     @Test
     void testRemoveStats() {
-        ArrayList<Integer> testModifiers = new ArrayList<>();
-        testModifiers.add(3);
-        testModifiers.add(-1);
-        testModifiers.add(-11);
-        testModifiers.add(-20);
-        Buff testBuff = new Buff("test", testModifiers);
+        Buff testBuff = new Buff(0, 0, 0);
+        testBuff.setOneModifier(1, -1);
+        testBuff.setOneModifier(2, -11);
+        testBuff.setOneModifier(3, -20);
         testPlayer.updateStats(testBuff);
         assertTrue(testPlayer.removeStats(testBuff));
 
@@ -90,7 +86,7 @@ class PlayerTest {
 
         assertEquals(0, testPlayer.getInventory().getBuffs().size());
 
-        assertFalse(testPlayer.removeStats(new Buff("asdf", new ArrayList<>())));
+        assertFalse(testPlayer.removeStats(new Buff(1, 1, 1)));
     }
 
     @Test
@@ -117,5 +113,16 @@ class PlayerTest {
         testPlayer.addLevel(5);
         testPlayer.subLevel(4);
         assertEquals(2, testPlayer.getLevel());
+    }
+
+    @Test
+    void testMove() {
+        testPlayer.move();
+        assertEquals(0, testPlayer.getX());
+        assertEquals(0, testPlayer.getY());
+        testPlayer.setXdir(1);
+        testPlayer.move();
+        assertEquals(10, testPlayer.getX());
+        assertEquals(0, testPlayer.getY());
     }
 }

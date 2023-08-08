@@ -172,7 +172,8 @@ public class JsonReader {
         Bullet b = new Bullet(jsonObject.getString("size"), jsonObject.getBoolean("mybullet"),
                 jsonObject.getInt("xpos"),
                 jsonObject.getInt("ypos"));
-        b.setDirection(jsonObject.getInt("xdir"), jsonObject.getInt("ydir"));
+        b.setXdirection(jsonObject.getInt("xdir"));
+        b.setYdirection(jsonObject.getInt("ydir"));
         return b;
     }
 
