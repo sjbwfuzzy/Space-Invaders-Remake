@@ -3,21 +3,53 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-// a bullet, having damage, speed, penetration, radius, mybullet
+import java.awt.*;
+
+// inspiration from https://github.students.cs.ubc.ca/CPSC210/B02-SpaceInvadersBase
+
+// a bullet, having damage, speed, radius, mybullet
 public class Bullet implements Writable {
+    public static final Color PCOLOR = new Color(233, 43, 18);
+
+    public static final Color ECOLOR = new Color(130, 37, 4);
+
     private int damage;
     private int speed;
-    private int penetration;
     private int radius;
     private boolean mybullet; //true if bullet is player's bullet, false otherwise
 
-    // initializes a bullet
-    public Bullet(int d, int s, int p, int r, boolean mb) {
-        damage = d;
-        speed = s;
-        penetration = p;
-        radius = r;
+    private int xpos;
+    private int ypos;
+    private int xdirection;
+    private int ydirection;
+    private String size;
+
+    // initializes a bullet facing down
+    public Bullet(String size, boolean mb, int x, int y) {
+        this.size = size;
         mybullet = mb;
+        xpos = x;
+        ypos = y;
+        xdirection = 0;
+        ydirection = -1;
+        switch (size) {
+            case "LARGE":
+                damage = 9;
+                speed = 2;
+                radius = 12;
+            case "MEDIUM":
+                damage = 3;
+                speed = 4;
+                radius = 6;
+            case "SMALL":
+                damage = 1;
+                speed = 6;
+                radius = 3;
+        }
+    }
+
+    public String getSize() {
+        return size;
     }
 
     public int getDamage() {
@@ -28,10 +60,6 @@ public class Bullet implements Writable {
         return speed;
     }
 
-    public int getPenetration() {
-        return penetration;
-    }
-
     public int getRadius() {
         return radius;
     }
@@ -40,14 +68,62 @@ public class Bullet implements Writable {
         return mybullet;
     }
 
+    public int getX() {
+        return xpos;
+    }
+
+    public int getY() {
+        return ypos;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets xdirection and ydirection
+    public void setDirection(int xdirection, int ydirection) {
+        this.xdirection = xdirection;
+        this.ydirection = ydirection;
+    }
+
+    // Updates the missile on clock tick
+    // modifies: this
+    // effects: missile is moved DY units (up the screen)
+    public void move() {
+        ypos = ypos + ydirection * speed;
+        xpos = xpos + xdirection * speed;
+    }
+
+    public boolean collidedWith(Enemy e) {
+        if (mybullet) {
+            Rectangle enemyHitbox = new Rectangle(e.getX() - e.getXsize() / 2, e.getY() - e.getYsize() / 2,
+                    e.getXsize(), e.getYsize());
+            Rectangle bulletHitbox = new Rectangle(getX() - radius, getY() - radius,
+                    radius * 2, radius * 2);
+            return enemyHitbox.intersects(bulletHitbox);
+        }
+        return false;
+    }
+
+    public boolean collidedWith(Player p) {
+        if (!mybullet) {
+            Rectangle playerHitbox = new Rectangle(p.getX() - Player.SIZE / 2, p.getY() - Player.SIZE / 2,
+                    Player.SIZE, Player.SIZE);
+            Rectangle bulletHitbox = new Rectangle(getX() - radius, getY() - radius,
+                    radius * 2, radius * 2);
+            return playerHitbox.intersects(bulletHitbox);
+        }
+        return false;
+    }
+
+
     @Override
+    // EFFECTS: returns Bullet as Json object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("damage", damage);
-        json.put("speed", speed);
-        json.put("penetration", penetration);
-        json.put("radius", radius);
         json.put("mybullet", mybullet);
+        json.put("xpos", xpos);
+        json.put("ypos", ypos);
+        json.put("xdir", xdirection);
+        json.put("ydir", ydirection);
+        json.put("size", size);
         return json;
     }
 }

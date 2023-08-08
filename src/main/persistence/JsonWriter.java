@@ -2,6 +2,7 @@ package persistence;
 
 // Inspiration from https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
+import model.Game;
 import model.Player;
 import org.json.JSONObject;
 
@@ -27,9 +28,9 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
-    public void write(Player p) {
-        JSONObject json = p.toJson();
+    // EFFECTS: writes JSON representation of game to file
+    public void write(Game g) {
+        JSONObject json = g.toJson();
         saveToFile(json.toString(TAB));
     }
 

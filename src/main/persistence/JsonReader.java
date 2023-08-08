@@ -21,12 +21,12 @@ public class JsonReader {
         this.source = source;
     }
 
-    // EFFECTS: reads player data from file and returns it;
+    // EFFECTS: reads game data from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public Player read() throws IOException {
+    public Game read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
-        return parsePlayer(jsonObject);
+        return parseGame(jsonObject);
     }
 
     // EFFECTS: reads source file as string and returns it
@@ -38,6 +38,78 @@ public class JsonReader {
         }
 
         return contentBuilder.toString();
+    }
+
+    private Game parseGame(JSONObject jsonObject) {
+        Game g = new Game();
+        g.setPlayer(parsePlayer(jsonObject));
+        g.setInventory(parseInventory(jsonObject));
+        g.setInvading(jsonObject.getBoolean("invading"));
+        g.setLowest(jsonObject.getInt("lowest"));
+        g.setLeftmost(jsonObject.getInt("leftmost"));
+        g.setRightmost(jsonObject.getInt("rightmost"));
+        g.setMovementUnits(jsonObject.getInt("movementUnits"));
+        g.setEnemyBullets(parseEnemyBullets(jsonObject.getJSONArray("enemyBullets")));
+        g.setPlayerBullets(parsePlayerBullets(jsonObject.getJSONArray("playerBullets")));
+        g.setItems(parseItems(jsonObject.getJSONArray("items")));
+        g.setEnemies(parseEnemies(jsonObject.getJSONArray("enemies")));
+
+        return g;
+    }
+
+    // EFFECTS: parses enemy from JSON object and returns it
+    private Enemy parseEnemy(JSONObject jsonObject) {
+        Enemy e = new Enemy(jsonObject.getString("size"), jsonObject.getInt("xpos"),
+                jsonObject.getInt("ypos"));
+        e.setHealth(jsonObject.getInt("health"));
+        e.setItem(parseItem(jsonObject.getJSONObject("item")));
+        return e;
+    }
+
+    // EFFECTS: parses enemies from JSON array and returns it
+    private ArrayList<Enemy> parseEnemies(JSONArray jsonArray) {
+        ArrayList<Enemy> e = new ArrayList<>();
+        for (int index = 0; index < jsonArray.length(); index++) {
+            e.add(parseEnemy(jsonArray.getJSONObject(index)));
+        }
+        return e;
+    }
+
+    // EFFECTS: parses items from JSON array and returns it
+    private ArrayList<Item> parseItems(JSONArray jsonArray) {
+        ArrayList<Item> i = new ArrayList<>();
+        for (int index = 0; index < jsonArray.length(); index++) {
+            i.add(parseItem(jsonArray.getJSONObject(index)));
+        }
+        return i;
+    }
+
+    // EFFECTS: parses JSONObject as either a buff or a weapon depending on the identifier
+    private Item parseItem(JSONObject jsonObject) {
+        if (jsonObject.getString("identifier") == "Buff") {
+            return parseBuff(jsonObject);
+        } else if (jsonObject.getString("identifier") == "Weapon") {
+            return parseWeapon(jsonObject);
+        }
+        return null;
+    }
+
+    // EFFECTS: parses player bullets from JSON array and returns it
+    private ArrayList<Bullet> parsePlayerBullets(JSONArray jsonArray) {
+        ArrayList<Bullet> pb = new ArrayList<>();
+        for (int index = 0; index < jsonArray.length(); index++) {
+            pb.add(parseBullet(jsonArray.getJSONObject(index)));
+        }
+        return pb;
+    }
+
+    // EFFECTS: parses enemy bullets from JSON array and returns it
+    private ArrayList<Bullet> parseEnemyBullets(JSONArray jsonArray) {
+        ArrayList<Bullet> eb = new ArrayList<>();
+        for (int index = 0; index < jsonArray.length(); index++) {
+            eb.add(parseBullet(jsonArray.getJSONObject(index)));
+        }
+        return eb;
     }
 
     // EFFECTS: parses player from JSON object and returns it
@@ -52,7 +124,13 @@ public class JsonReader {
 
         Inventory inventory = parseInventory(jsonObject.getJSONObject("inventory"));
 
-        return new Player(stats, experience, level, inventory);
+        Player p = new Player(stats, experience, level, inventory, jsonObject.getInt("xpos"),
+                jsonObject.getInt("ypos"));
+
+        p.setHealth(jsonObject.getInt("health"));
+        p.setXdir(jsonObject.getInt("xdir"));
+        p.setYdir(jsonObject.getInt("ydir"));
+        return p;
     }
 
     // EFFECTS: parses inventory from JSON object and returns it
@@ -75,15 +153,19 @@ public class JsonReader {
 
     // EFFECTS: parses weapon from JSON object and returns it
     private Weapon parseWeapon(JSONObject jsonObject) {
-        return new Weapon(jsonObject.getString("name"), jsonObject.getInt("fireRate"),
-                parseBullet(jsonObject.getJSONObject("bulletType")));
+        Weapon w = new Weapon(jsonObject.getString("size"), jsonObject.getInt("xpos"),
+                jsonObject.getInt("ypos"));
+        w.setIdentifier(jsonObject.getString("identifier"));
+        return w;
     }
 
     // EFFECTS: parses bullet from JSON object and returns it
     private Bullet parseBullet(JSONObject jsonObject) {
-        return new Bullet(jsonObject.getInt("damage"), jsonObject.getInt("speed"),
-                jsonObject.getInt("penetration"),
-                jsonObject.getInt("radius"), jsonObject.getBoolean("mybullet"));
+        Bullet b = new Bullet(jsonObject.getString("size"), jsonObject.getBoolean("mybullet"),
+                jsonObject.getInt("xpos"),
+                jsonObject.getInt("ypos"));
+        b.setDirection(jsonObject.getInt("xdir"), jsonObject.getInt("ydir"));
+        return b;
     }
 
     // EFFECTS: parses list of buffs from JSONArray and returns it
@@ -97,15 +179,10 @@ public class JsonReader {
 
     // EFFECTS: parses buff from JSON object and returns it
     private Buff parseBuff(JSONObject jsonObject) {
-        return new Buff(jsonObject.getString("name"), parseModifiers(jsonObject.getJSONArray("modifiers")));
+        Buff b = new Buff(jsonObject.getInt("type"),
+                jsonObject.getInt("xpos"), jsonObject.getInt("ypos"));
+        b.setIdentifier(jsonObject.getString("identifier"));
+        return b;
     }
 
-    // EFFECTS: parses list of modifiers (for a buff) from JSONArray and returns it
-    private ArrayList<Integer> parseModifiers(JSONArray jsonArray) {
-        ArrayList<Integer> modifiers = new ArrayList<>(4);
-        for (int index = 0; index < jsonArray.length(); index++) {
-            modifiers.add(jsonArray.getInt(index));
-        }
-        return modifiers;
-    }
 }

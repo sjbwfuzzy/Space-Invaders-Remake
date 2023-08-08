@@ -4,23 +4,57 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-// Represents the player, having health, attack, speed, experience, level
+// inspiration from https://github.students.cs.ubc.ca/CPSC210/B02-SpaceInvadersBase
+
+// Represents the player
 public class Player implements Writable {
+    public static final int SIZE = 15;
+    public static final Color COLOR = new Color(250, 128, 20);
+
+    // includes Max Health, Bonus Attack, Movement Speed, and Fire Rate
     private ArrayList<Integer> stats;
 
     private int experience;
     private int level;
 
+    private int health;
+    private int xpos;
+    private int ypos;
+    private int xdirection;
+    private int ydirection;
+
     private Inventory inventory;
 
+    // REQUIRES: s.size() is always 4
     // EFFECTS: constructs player with given parameters
-    public Player(ArrayList<Integer> s, int exp, int lvl, Inventory i) {
+    public Player(ArrayList<Integer> s, int exp, int lvl, Inventory i, int x, int y) {
         stats = s;
         experience = exp;
         level = lvl;
         inventory = i;
+
+        health = getMaxHealth();
+        xpos = x;
+        ypos = y;
+        xdirection = 0;
+        ydirection = 0;
+    }
+
+
+
+    public int getX() {
+        return xpos;
+    }
+
+    public int getY() {
+        return ypos;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public int getMaxHealth() {
@@ -47,8 +81,92 @@ public class Player implements Writable {
         return level;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setX(int xpos) {
+        this.xpos = xpos;
+    }
+
+    public void setY(int ypos) {
+        this.ypos = ypos;
+    }
+
+    public void setXdir(int xdirection) {
+        this.xdirection = xdirection;
+    }
+
+    public void setYdir(int ydirection) {
+        this.ydirection = ydirection;
+    }
+
     public Inventory getInventory() {
         return inventory;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds amount to health
+    public void updateHealth(int amount) {
+        health = health + amount;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Faces player to the right
+    public void faceRight() {
+        xdirection = 1;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Faces player to the left
+    public void faceLeft() {
+        xdirection = -1;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Faces player up
+    public void faceUp() {
+        ydirection = -1;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Faces player down
+    public void faceDown() {
+        ydirection = 1;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: resets x and y direction to 0
+    public void resetDirection() {
+        xdirection = 0;
+        ydirection = 0;
+    }
+
+    // Updates the tank on clock tick
+    // modifies: this
+    // effects:  tank is moved DX units in whatever direction it is facing and is
+    //           constrained to remain within vertical boundaries of game
+    public void move() {
+        xpos = xpos + xdirection * getSpeed();
+        ypos = ypos + ydirection * getSpeed();
+        handleBoundary();
+    }
+
+    // Constrains tank so that it doesn't travel of sides of screen
+    // modifies: this
+    // effects: tank is constrained to remain within vertical boundaries of game
+    private void handleBoundary() {
+        if (xpos < 0) {
+            xpos = 0;
+        } else if (xpos > Game.WIDTH) {
+            xpos = Game.WIDTH;
+        }
+
+        if (ypos > Game.HEIGHT) {
+            ypos = Game.HEIGHT;
+        } else if (ypos < 0) {
+            ypos = 0;
+        }
     }
 
     // REQUIRES: buff.getModifiers().size() = stats.size()
@@ -119,11 +237,17 @@ public class Player implements Writable {
     }
 
     @Override
+    // EFFECTS: returns player as Json object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("stats", statsToJson());
         json.put("experience", experience);
         json.put("level", level);
+        json.put("health", health);
+        json.put("xpos", xpos);
+        json.put("ypos", ypos);
+        json.put("xdir", xdirection);
+        json.put("ydir", ydirection);
         json.put("inventory", inventory.toJson());
         return json;
     }

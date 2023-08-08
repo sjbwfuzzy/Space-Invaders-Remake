@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,7 +66,7 @@ public class JsonReaderTest {
             assertEquals("weapon1", weapon1.getName());
             assertEquals(15, weapon1.getFireRate());
 
-            Bullet bullet = weapon1.getBulletType();
+            Bullet bullet = weapon1.getBullet();
             assertEquals(1, bullet.getRadius());
             assertEquals(1, bullet.getDamage());
             assertEquals(1, bullet.getPenetration());

@@ -101,10 +101,11 @@ public class Inventory implements Writable {
         }
         // this should never be reached, as the game should always check that containsBuff(name) is true before
         // attempting to call getBuff(name).
-        return new Buff("Something went wrong", new ArrayList<>());
+        return null;
     }
 
     @Override
+    // EFFECTS: returns inventory as Json object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("money", money);

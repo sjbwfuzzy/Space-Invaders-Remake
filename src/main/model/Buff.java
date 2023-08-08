@@ -4,21 +4,42 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 // represents a buff with a name, and a list of modifiers to increase player stats with
-public class Buff implements Writable {
-    private String name;
-    private ArrayList<Integer> modifiers;
+public class Buff extends Item implements Writable {
+    public static final Color COLOR = new Color(30, 219, 13);
 
-    // EFFECTS: Initializes a buff with name, and list of modifier amounts
-    public Buff(String name, ArrayList<Integer> amounts) {
-        this.name = name;
-        this.modifiers = amounts;
-    }
+    private ArrayList<Integer> modifiers = new ArrayList<>(4);
+    private int type;
 
-    public String getName() {
-        return name;
+    // EFFECTS: Initializes a buff depending on the type (a number between 0 and 3)
+    public Buff(int type, int x, int y) {
+        super(x, y);
+        this.type = type;
+        for (int counter = 0; counter < 4; counter++) {
+            modifiers.add(0);
+        }
+        setIdentifier("Buff");
+        switch (type) {
+            case 0:
+                name = "Increase Max Health";
+                modifiers.set(0, 3);
+                break;
+            case 1:
+                name = "Increase Bonus Attack";
+                modifiers.set(1, 1);
+                break;
+            case 2:
+                name = "Increase Movement Speed";
+                modifiers.set(2, 1);
+                break;
+            case 3:
+                name = "Increase Fire Rate";
+                modifiers.set(3, 10);
+                break;
+        }
     }
 
     public ArrayList<Integer> getModifiers() {
@@ -35,20 +56,18 @@ public class Buff implements Writable {
         modifiers.set(index, value);
     }
 
-    @Override
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("modifiers", modifiersToJson());
-        return json;
+    public int getType() {
+        return type;
     }
 
-    // EFFECTS: returns modifiers as a JSON array
-    private JSONArray modifiersToJson() {
-        JSONArray jsonArray = new JSONArray();
-        for (int modifier : modifiers) {
-            jsonArray.put(modifier);
-        }
-        return jsonArray;
+    @Override
+    // EFFECTS: returns Buff as Json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("type", type);
+        json.put("identifier", getIdentifier());
+        json.put("xpos", getX());
+        json.put("ypos", getY());
+        return json;
     }
 }

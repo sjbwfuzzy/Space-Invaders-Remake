@@ -19,7 +19,7 @@ class WeaponTest {
     void testConstructor() {
         assertEquals(55, testWeapon.getFireRate());
         assertEquals("w1", testWeapon.getName());
-        assertEquals(b1, testWeapon.getBulletType());
+        assertEquals(b1, testWeapon.getBullet());
     }
 
     @Test
