@@ -5,6 +5,7 @@ package persistence;
 import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ui.Game;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +42,7 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
+    // EFFECTS: parses game from JSON object and returns it
     private Game parseGame(JSONObject jsonObject) {
         Game g = new Game();
         g.setPlayer(parsePlayer(jsonObject.getJSONObject("player")));

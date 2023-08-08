@@ -2,8 +2,7 @@ package persistence;
 
 // Inspiration from https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
-import model.Game;
-import model.Player;
+import ui.Game;
 import org.json.JSONObject;
 
 import java.io.File;

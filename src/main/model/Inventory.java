@@ -16,7 +16,7 @@ public class Inventory implements Writable {
     private ArrayList<Weapon> weapons;
     private ArrayList<Buff> buffs;
 
-    // EFFECTS: creates the default inventory
+    // EFFECTS: creates inventory from given arguments
     public Inventory(int m, ArrayList<Weapon> w, ArrayList<Buff> b) {
         money = m;
         weapons = w;

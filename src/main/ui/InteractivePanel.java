@@ -1,7 +1,6 @@
 package ui;
 
 import model.Buff;
-import model.Game;
 import model.Inventory;
 import model.Weapon;
 

@@ -45,11 +45,13 @@ public class Buff extends Item implements Writable {
     }
 
     // REQUIRES: 0 <= index < modifiers.size()
+    // EFFECTS: gets modifier from modifiers with given index
     public int getOneModifier(int index) {
         return modifiers.get(index);
     }
 
     // REQUIRES: 0 <= index < modifiers.size()
+    // EFFECTS: sets modifier to value from modifiers with given index
     public void setOneModifier(int index, int value) {
         modifiers.set(index, value);
     }

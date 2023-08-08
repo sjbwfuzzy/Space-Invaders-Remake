@@ -1,7 +1,5 @@
 package ui;
 
-import model.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -63,7 +61,7 @@ public class RunGame extends JFrame {
     private class KeyHandler extends KeyAdapter {
 
         // MODIFIES: this
-        // EFFECTS: sends keycode for game and panels to handle
+        // EFFECTS: sends keycode for game to handle
         @Override
         public void keyPressed(KeyEvent e) {
             game.handleKey(e.getKeyCode());
@@ -84,7 +82,7 @@ public class RunGame extends JFrame {
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 
-    // play the game
+    // plays the game
     public static void main(String[] args) {
         new RunGame();
     }

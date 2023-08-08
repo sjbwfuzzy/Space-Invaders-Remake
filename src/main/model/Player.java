@@ -3,6 +3,7 @@ package model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
+import ui.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -142,9 +143,8 @@ public class Player implements Writable {
         ydirection = 1;
     }
 
-    // Updates the tank on clock tick
-    // modifies: this
-    // effects:  tank is moved DX units in whatever direction it is facing and is
+    // MODIFIES: this
+    // EFFECTS:  player is moved by xdirection * getSpeed() and ydirection * getSpeed() in x and y directions,
     //           constrained to remain within vertical boundaries of game
     public void move() {
         xpos = xpos + xdirection * getSpeed();
@@ -152,9 +152,8 @@ public class Player implements Writable {
         handleBoundary();
     }
 
-    // Constrains tank so that it doesn't travel of sides of screen
-    // modifies: this
-    // effects: tank is constrained to remain within vertical boundaries of game
+    // MODIFIES: this
+    // EFFECTS: player is constrained to remain within boundaries of game
     private void handleBoundary() {
         if (xpos < 0) {
             xpos = 0;
@@ -192,6 +191,7 @@ public class Player implements Writable {
         return isAdded;
     }
 
+    // EFFECTS: if player has collided with enemy return true, false otherwise
     public boolean collidedWith(Enemy e) {
         Rectangle enemyHitbox = new Rectangle(e.getX() - e.getXsize() / 2, e.getY() - e.getYsize() / 2,
                 e.getXsize(), e.getYsize());

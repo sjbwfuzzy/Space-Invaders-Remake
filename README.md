@@ -45,5 +45,16 @@ directions
  - As a user, I want to be able to load the game state back
 
 
+# Instructions For Grader:
+- You can add items (weapons and buffs) to your inventory by defeating enemies 
+and catching the items that drop from them.
+- You can remove weapons and buffs by clicking on the corresponding button to the left of the
+game.
+- You can locate the visual component by running the game
+- You can save the state of the game by pressing Save Game
+- You can reload the state of the game by pressing Load Game
+- To move, press arrow keys, to shoot, press space bar.
+
+
 
 

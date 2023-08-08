@@ -2,7 +2,7 @@ package model;
 
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
-import persistence.JsonWriter;
+import ui.Game;
 
 import java.io.IOException;
 

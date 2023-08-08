@@ -22,6 +22,8 @@ public class GamePanel extends JPanel {
         this.game = g;
     }
 
+    // MODIFIES: g
+    // EFFECTS: draws the game
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

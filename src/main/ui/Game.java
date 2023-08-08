@@ -1,5 +1,6 @@
-package model;
+package ui;
 
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.JsonReader;
@@ -233,7 +234,7 @@ public class Game implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS:  turns player, fires bullets, depending on the keycode
+    // EFFECTS:  adds keycode to keysPressed if it is one of the 5 specified keys
     public void handleKey(Integer keyCode) {
         if (keyCode == KeyEvent.VK_SPACE
                 || keyCode == KeyEvent.VK_LEFT
@@ -245,9 +246,8 @@ public class Game implements Writable {
         }
     }
 
-    // Controls the tank
-    // modifies: this
-    // effects: turns tank in response what keys are in keysPressed
+    // MODIFIES: this
+    // EFFECTS: turns player in based on which keys are pressed
     private void playerControl() {
         if (!invading) {
             if (keysPressed.contains(KeyEvent.VK_LEFT)) {
@@ -265,6 +265,8 @@ public class Game implements Writable {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes the released key from keysPressed
     public void handleKeyReleased(Integer keyCode) {
         keysPressed.remove(keyCode);
         if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT) {

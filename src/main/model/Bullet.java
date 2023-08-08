@@ -24,7 +24,7 @@ public class Bullet implements Writable {
     private int ydirection;
     private String size;
 
-    // initializes a bullet facing down
+    // EFFECTS: initializes a bullet facing down
     public Bullet(String size, boolean mb, int x, int y) {
         this.size = size;
         mybullet = mb;
@@ -95,14 +95,14 @@ public class Bullet implements Writable {
         this.ydirection = ydirection;
     }
 
-    // Updates the missile on clock tick
-    // modifies: this
-    // effects: missile is moved DY units (up the screen)
+    // MODIFIES: this
+    // EFFECTS: bullet is moved by direction * speed in x and y direction
     public void move() {
         ypos = ypos + ydirection * speed;
         xpos = xpos + xdirection * speed;
     }
 
+    // EFFECTS: returns true if is player bullet and collided with enemy, false otherwise
     public boolean collidedWith(Enemy e) {
         if (mybullet) {
             Rectangle enemyHitbox = new Rectangle(e.getX() - e.getXsize() / 2, e.getY() - e.getYsize() / 2,
@@ -114,6 +114,7 @@ public class Bullet implements Writable {
         return false;
     }
 
+    // EFFECTS: returns true if is enemy bullet and collided with player, false otherwise
     public boolean collidedWith(Player p) {
         if (!mybullet) {
             Rectangle playerHitbox = new Rectangle(p.getX() - Player.SIZE / 2, p.getY() - Player.SIZE / 2,

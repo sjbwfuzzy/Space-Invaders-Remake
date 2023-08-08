@@ -1,11 +1,7 @@
 package ui;
 
-import model.Game;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.Set;
 
 public class StatPanel extends JPanel {
     private static final int LBL_WIDTH = 200;
