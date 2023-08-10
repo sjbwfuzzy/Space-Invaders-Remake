@@ -19,7 +19,7 @@ public class EnemyTest {
         assertEquals("SMALL", te.getSize());
         assertEquals(0, te.getX());
         assertEquals(0, te.getY());
-        assertEquals(10, te.getScore());
+        assertEquals(5, te.getScore());
     }
 
     @Test

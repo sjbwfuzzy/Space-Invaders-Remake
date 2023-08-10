@@ -45,16 +45,32 @@ directions
  - As a user, I want to be able to load the game state back
 
 
-# Instructions For Grader:
+## Instructions For Grader:
 - You can add items (weapons and buffs) to your inventory by defeating enemies 
 and catching the items that drop from them.
-- You can remove weapons and buffs by clicking on the corresponding button to the left of the
+- You can remove weapons and buffs by clicking on the corresponding button to the right of the
 game.
 - You can locate the visual component by running the game
 - You can save the state of the game by pressing Save Game
 - You can reload the state of the game by pressing Load Game
 - To move, press arrow keys, to shoot, press space bar.
 
+
+## Phase 4: Task 2
+Wed Aug 09 17:12:11 PDT 2023
+Buff: Increase Bonus Attack was added to the inventory
+Wed Aug 09 17:12:23 PDT 2023
+Buff: Increase Bonus Attack was added to the inventory
+Wed Aug 09 17:12:54 PDT 2023
+Buff: Increase Movement Speed was added to the inventory
+Wed Aug 09 17:13:03 PDT 2023
+Weapon: Medium Gun was added to the inventory
+Wed Aug 09 17:13:08 PDT 2023
+Buff: Increase Movement Speed was removed from the inventory
+Wed Aug 09 17:13:08 PDT 2023
+Buff: Increase Bonus Attack was removed from the inventory
+Wed Aug 09 17:13:09 PDT 2023
+Weapon: Medium Gun was removed from the inventory
 
 
 

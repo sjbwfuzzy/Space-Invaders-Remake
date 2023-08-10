@@ -118,13 +118,13 @@ public class JsonWriterTest {
             assertEquals(3, weapon1.getFireRate());
 
             assertEquals("LARGE", g.getEnemies().get(0).getSize());
-            assertEquals(40, g.getEnemies().get(0).getHealth());
+            assertEquals(20, g.getEnemies().get(0).getHealth());
             assertEquals(0, g.getEnemies().get(0).getX());
             assertEquals(0, g.getEnemies().get(0).getY());
             assertNull(g.getEnemies().get(0).getItem());
 
             assertEquals("SMALL", g.getEnemies().get(1).getSize());
-            assertEquals(10, g.getEnemies().get(1).getHealth());
+            assertEquals(5, g.getEnemies().get(1).getHealth());
             assertEquals(1, g.getEnemies().get(1).getX());
             assertEquals(1, g.getEnemies().get(1).getY());
             assertEquals("Buff", g.getEnemies().get(1).getItem().getIdentifier());

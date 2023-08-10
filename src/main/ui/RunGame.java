@@ -1,11 +1,11 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 // inspiration from https://github.students.cs.ubc.ca/CPSC210/B02-SpaceInvadersBase
 // The main window where game is played
@@ -21,7 +21,7 @@ public class RunGame extends JFrame {
     // EFFECTS: sets up window in which game will be played
     public RunGame() {
         super("A Game Inspired by Space Invaders");
-        setResizable(true);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(false);
         game = new Game();
@@ -34,6 +34,7 @@ public class RunGame extends JFrame {
         add(sp, BorderLayout.SOUTH);
         add(bp, BorderLayout.EAST);
         addKeyListener(new KeyHandler());
+        addWindowListener(new WindowHandler());
         pack();
         centreOnScreen();
         setVisible(true);
@@ -72,6 +73,18 @@ public class RunGame extends JFrame {
         @Override
         public void keyReleased(KeyEvent e) {
             game.handleKeyReleased(e.getKeyCode());
+        }
+    }
+
+    // responds to window events
+    private class WindowHandler extends WindowAdapter {
+
+        // EFFECTS: prints out the game's event log when the game is closed
+        @Override
+        public void windowClosing(WindowEvent e) {
+            for (Event event : EventLog.getInstance()) {
+                System.out.println(event);
+            }
         }
     }
 

@@ -37,36 +37,49 @@ public class Inventory implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: if inventory still has space for weapon, return true and add weapon. Else, return false
+    // EFFECTS: if inventory still has space for weapon,  add weapon, log event, and return true. Else, return false
     public boolean addWeapon(Weapon weapon) {
-        if (weapons.size() < MAX_WEAPONS) {
-            weapons.add(weapon);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: if weapon is in weapons, remove it and return true. Else, return false
-    public boolean removeWeapon(Weapon weapon) {
-        return weapons.remove(weapon);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: if inventory still has space for buff, return true and add buff. Else, return false
-    protected boolean addBuff(Buff buff) {
-        boolean canAdd = buffs.size() < MAX_BUFFS;
+        boolean canAdd = weapons.size() < MAX_WEAPONS;
         if (canAdd) {
-            buffs.add(buff);
+            weapons.add(weapon);
+            EventLog.getInstance().logEvent(new Event("Weapon: " + weapon.getName()
+                    + " was added to the inventory"));
         }
         return canAdd;
     }
 
     // MODIFIES: this
-    // EFFECTS: if buff is in buffs, remove it and return true. Else, return false
+    // EFFECTS: if weapon is in weapons, remove it, log event, and return true. Else, return false
+    public boolean removeWeapon(Weapon weapon) {
+        boolean removed = weapons.remove(weapon);
+        if (removed) {
+            EventLog.getInstance().logEvent(new Event("Weapon: " + weapon.getName()
+                    + " was removed from the inventory"));
+        }
+        return removed;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if inventory still has space for buff, add buff, log event, and return true. Else, return false
+    protected boolean addBuff(Buff buff) {
+        boolean canAdd = buffs.size() < MAX_BUFFS;
+        if (canAdd) {
+            buffs.add(buff);
+            EventLog.getInstance().logEvent(new Event("Buff: " + buff.getName()
+                    + " was added to the inventory"));
+        }
+        return canAdd;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if buff is in buffs, remove it, log event, and return true. Else, return false
     protected boolean removeBuff(Buff buff) {
-        return buffs.remove(buff);
+        boolean removed = buffs.remove(buff);
+        if (removed) {
+            EventLog.getInstance().logEvent(new Event("Buff: " + buff.getName()
+                    + " was removed from the inventory"));
+        }
+        return removed;
     }
 
     public int getMoney() {

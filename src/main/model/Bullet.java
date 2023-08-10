@@ -41,12 +41,12 @@ public class Bullet implements Writable {
             case "MEDIUM":
                 damage = 3;
                 speed = 4;
-                radius = 6;
+                radius = 8;
                 break;
             case "SMALL":
                 damage = 1;
                 speed = 6;
-                radius = 3;
+                radius = 4;
                 break;
         }
     }
@@ -93,6 +93,10 @@ public class Bullet implements Writable {
 
     public void setYdirection(int ydirection) {
         this.ydirection = ydirection;
+    }
+
+    public void setDamage(int d) {
+        damage = d;
     }
 
     // MODIFIES: this

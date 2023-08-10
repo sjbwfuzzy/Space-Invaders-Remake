@@ -65,9 +65,6 @@ public class InfoPanel extends JPanel {
     public void update() {
         score.setText(SCORE_TXT + game.getScore());
         health.setText(HEALTH_TXT + game.getPlayer().getHealth());
-        if (game.isOver()) {
-            loadGame.setVisible(false);
-            saveGame.setVisible(false);
-        }
+//        }
     }
 }

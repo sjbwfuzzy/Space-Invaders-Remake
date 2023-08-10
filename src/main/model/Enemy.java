@@ -29,17 +29,17 @@ public class Enemy implements Writable {
             case "SMALL":
                 xsize = 15;
                 ysize = 10;
-                score = health = 10;
+                score = health = 5;
                 break;
             case "MEDIUM":
                 xsize = 25;
                 ysize = 20;
-                score = health = 20;
+                score = health = 10;
                 break;
             case "LARGE":
                 xsize = 35;
                 ysize = 30;
-                score = health = 40;
+                score = health = 20;
                 break;
         }
     }

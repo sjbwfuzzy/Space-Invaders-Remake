@@ -1,7 +1,809 @@
 {
     "invading": false,
-    "enemyBullets": [],
-    "enemies": [],
+    "enemyBullets": [
+        {
+            "ypos": 559,
+            "xpos": 316,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 370,
+            "xpos": 537,
+            "size": "LARGE",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 385,
+            "xpos": 505,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 548,
+            "xpos": 140,
+            "size": "SMALL",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 406,
+            "xpos": 123,
+            "size": "SMALL",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 362,
+            "xpos": 639,
+            "size": "SMALL",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 307,
+            "xpos": 582,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 346,
+            "xpos": 3,
+            "size": "SMALL",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 257,
+            "xpos": 206,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 145,
+            "xpos": 13,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 191,
+            "xpos": 179,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        },
+        {
+            "ypos": 113,
+            "xpos": 181,
+            "size": "MEDIUM",
+            "ydir": 1,
+            "xdir": 0,
+            "mybullet": false
+        }
+    ],
+    "enemies": [
+        {
+            "item": null,
+            "ypos": 15,
+            "xpos": 28,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 15,
+            "xpos": 64,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            },
+            "ypos": 45,
+            "xpos": 28,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 2
+            },
+            "ypos": 45,
+            "xpos": 64,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 10,
+            "xpos": 101,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 10,
+            "xpos": 126,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 10,
+            "xpos": 151,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 101,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 126,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 151,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 50,
+            "xpos": 101,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "MEDIUM"
+            },
+            "ypos": 50,
+            "xpos": 126,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 50,
+            "xpos": 151,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 15,
+            "xpos": 188,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 2
+            },
+            "ypos": 15,
+            "xpos": 224,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 3
+            },
+            "ypos": 45,
+            "xpos": 188,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 45,
+            "xpos": 224,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 15,
+            "xpos": 268,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "MEDIUM"
+            },
+            "ypos": 15,
+            "xpos": 304,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 45,
+            "xpos": 268,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 45,
+            "xpos": 304,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 366,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 15,
+            "xpos": 428,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 15,
+            "xpos": 464,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 45,
+            "xpos": 428,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 45,
+            "xpos": 464,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 526,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 10,
+            "xpos": 581,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 10,
+            "xpos": 606,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 10,
+            "xpos": 631,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 2
+            },
+            "ypos": 30,
+            "xpos": 581,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 606,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 30,
+            "xpos": 631,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 50,
+            "xpos": 581,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 50,
+            "xpos": 606,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "MEDIUM"
+            },
+            "ypos": 50,
+            "xpos": 631,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 28,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 64,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 28,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 64,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 100,
+            "xpos": 126,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 188,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 224,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            },
+            "ypos": 115,
+            "xpos": 188,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 224,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 268,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 304,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 268,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 3
+            },
+            "ypos": 115,
+            "xpos": 304,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 348,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            },
+            "ypos": 85,
+            "xpos": 384,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 3
+            },
+            "ypos": 115,
+            "xpos": 348,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 384,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 100,
+            "xpos": 446,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 100,
+            "xpos": 526,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 85,
+            "xpos": 588,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "MEDIUM"
+            },
+            "ypos": 85,
+            "xpos": 624,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 588,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 115,
+            "xpos": 624,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 150,
+            "xpos": 21,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 150,
+            "xpos": 46,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 150,
+            "xpos": 71,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 170,
+            "xpos": 21,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 170,
+            "xpos": 46,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 170,
+            "xpos": 71,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 190,
+            "xpos": 21,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 0
+            },
+            "ypos": 190,
+            "xpos": 46,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 190,
+            "xpos": 71,
+            "size": "SMALL",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 170,
+            "xpos": 126,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 155,
+            "xpos": 188,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 155,
+            "xpos": 224,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 185,
+            "xpos": 188,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "SMALL"
+            },
+            "ypos": 185,
+            "xpos": 224,
+            "size": "MEDIUM",
+            "health": 5
+        },
+        {
+            "item": null,
+            "ypos": 155,
+            "xpos": 268,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 2
+            },
+            "ypos": 155,
+            "xpos": 304,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 185,
+            "xpos": 268,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 185,
+            "xpos": 304,
+            "size": "MEDIUM",
+            "health": 8
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 2
+            },
+            "ypos": 155,
+            "xpos": 348,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 155,
+            "xpos": 384,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": {
+                "identifier": "Buff",
+                "ypos": 0,
+                "xpos": 0,
+                "type": 2
+            },
+            "ypos": 185,
+            "xpos": 348,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 185,
+            "xpos": 384,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 170,
+            "xpos": 446,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": {
+                "identifier": "Weapon",
+                "ypos": 0,
+                "xpos": 0,
+                "size": "LARGE"
+            },
+            "ypos": 170,
+            "xpos": 526,
+            "size": "LARGE",
+            "health": 20
+        },
+        {
+            "item": null,
+            "ypos": 155,
+            "xpos": 588,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 155,
+            "xpos": 624,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 185,
+            "xpos": 588,
+            "size": "MEDIUM",
+            "health": 10
+        },
+        {
+            "item": null,
+            "ypos": 185,
+            "xpos": 624,
+            "size": "MEDIUM",
+            "health": 10
+        }
+    ],
     "inventory": {
         "money": 0,
         "buffs": [],
@@ -12,16 +814,16 @@
             "size": "SMALL"
         }]
     },
-    "lowest": 0,
+    "lowest": 240,
     "movementUnits": 1,
     "score": 0,
-    "leftmost": 0,
+    "leftmost": 21,
     "isGameOver": false,
-    "rightmost": 0,
+    "rightmost": 631,
     "items": [],
     "player": {
-        "ypos": 560,
-        "xpos": 100,
+        "ypos": 418,
+        "xpos": 282,
         "stats": [
             10,
             1,

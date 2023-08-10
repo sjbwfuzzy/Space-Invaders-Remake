@@ -195,8 +195,6 @@ public class Game implements Writable {
             } else {
                 moveEnemies();
             }
-        } else {
-            clearAll();
         }
     }
 
@@ -222,15 +220,6 @@ public class Game implements Writable {
             player.setYdir(0);
             player.setXdir(0);
         }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: clears screen
-    private void clearAll() {
-        enemies.clear();
-        enemyBullets.clear();
-        playerBullets.clear();
-        items.clear();
     }
 
     // MODIFIES: this
@@ -285,6 +274,7 @@ public class Game implements Writable {
         for (Weapon w : inventory.getWeapons()) {
             if (w.canFire() && keysPressed.contains(KeyEvent.VK_SPACE)) {
                 Bullet b = new Bullet(w.getSize(), true, player.getX(), player.getY());
+//                b.setDamage(100);
                 playerBullets.add(b);
                 w.setCanFire(false);
                 w.getTimer().restart();
@@ -351,15 +341,15 @@ public class Game implements Writable {
                 break;
             }
             for (Bullet bullet : playerBullets) {
-                if (bullet.collidedWith(enemy)) {
+                if (bullet.collidedWith(enemy) & enemy.getHealth() > 0) {
                     bulletsToRemove.add(bullet);
                     enemy.reduceHealth(bullet.getDamage());
-                    if (enemy.getHealth() <= 0) {
-                        dropItem(enemy);
-                        score += enemy.getScore();
-                        enemiesToRemove.add(enemy);
-                    }
                 }
+            }
+            if (enemy.getHealth() <= 0) {
+                dropItem(enemy);
+                score += enemy.getScore();
+                enemiesToRemove.add(enemy);
             }
         }
         enemies.removeAll(enemiesToRemove);
@@ -464,8 +454,8 @@ public class Game implements Writable {
                 addEnemy(type, x, y);
             }
         }
-        for (int counter = 0; counter < 5; counter++) {
-            int num = new Random().nextInt(enemies.size());
+        for (int counter = 0; counter < enemies.size() / 4; counter++) {
+            int num = new Random().nextInt(enemies.size() - 1);
             Enemy chosen = enemies.get(num);
             chosen.setItem(randomItem());
         }
@@ -601,9 +591,10 @@ public class Game implements Writable {
     public void loadGame() {
         try {
             Game g = jsonReader.read();
+            isGameOver = g.isGameOver;
             score = g.score;
-            player = g.getPlayer();
-            inventory = player.getInventory();
+            player = g.player;
+            inventory = g.inventory;
             invading = g.invading;
             lowest = g.lowest;
             leftmost = g.leftmost;

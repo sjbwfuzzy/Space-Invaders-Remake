@@ -7,7 +7,7 @@
             "ypos": 0,
             "xpos": 0,
             "size": "LARGE",
-            "health": 40
+            "health": 20
         },
         {
             "item": {
@@ -19,7 +19,7 @@
             "ypos": 1,
             "xpos": 1,
             "size": "SMALL",
-            "health": 10
+            "health": 5
         }
     ],
     "inventory": {

@@ -19,7 +19,7 @@ class BulletTest {
     void testConstructor() {
         assertEquals(1, tb.getDamage());
         assertEquals(6, tb.getSpeed());
-        assertEquals(3, tb.getRadius());
+        assertEquals(4, tb.getRadius());
         assertTrue(tb.isMybullet());
     }
 

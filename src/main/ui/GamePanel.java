@@ -117,6 +117,8 @@ public class GamePanel extends JPanel {
     // EFFECTS:  draws game over message onto g
     private void gameOver(Graphics g) {
         Color saved = g.getColor();
+        g.setColor(Color.GRAY);
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(new Color(0, 0, 0));
         g.setFont(new Font("Arial", Font.PLAIN, 20));
         FontMetrics fm = g.getFontMetrics();
