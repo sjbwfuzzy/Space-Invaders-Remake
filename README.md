@@ -72,5 +72,38 @@ Buff: Increase Bonus Attack was removed from the inventory
 Wed Aug 09 17:13:09 PDT 2023
 Weapon: Medium Gun was removed from the inventory
 
+## Phase 4: Task 3
+Overall I am pretty satisfied with the design of my project. There are a few 
+things I would change if I had more time though. The Game class does most of
+in determining what type of Bullet that each enemy and weapon should shoot.
+Each Enemy and Weapon has a size, and the Bullet has a size as well. This
+is how the Game class determines which bullet to generate. However, it would
+make more sense to initialize each Enemy and Weapon with a pre-specified 
+Bullet, so the Game class is less crowded. Actually, in a previous iteration
+of this project, the Weapon class did have a field for Bullet. However, I
+hadn't added the Enemy class yet, and for some reason thought that after 
+adding the Enemy class, my old design would no longer work. Given more time,
+I would definitely try to fix this. 
 
+Another thing I would change would be to merge the InfoPanel and StatPanel
+classes. Actually, these display really similar things. The only reason 
+they're separate is because I couldn't figure out how to display 2 separate
+JPanels in the same class. I wanted to have a top panel and a bottom panel, 
+but the only way I could think of to achieve this was to create 2 separate 
+classes. There's also 2 random JButtons for loading and saving the game,
+located in the InfoPanel. These should really be moved to the 
+InteractivePanel class, as that's where the rest of the JButtons are. 
+I only put them in the InfoPanel class because I couldn't 
+figure out how to position them nicely otherwise. 
+
+This project was definitely pretty fun, but also pretty challenging. This 
+was my first time creating such a large scale project, and also my first time
+using java. With summer session being half the length of winter session, time
+was also a big factor. Phase 3 was definitely the toughest part. I pulled my
+first all-nighter ever to finish it. I underestimated the difficulty of 
+implementing a graphical user interface, and I also hadn't implemented most
+of the game in Phase 2, so it took me a very long time to finish Phase 3. 
+There were some components I originally wanted to add to the game that I 
+didn't have time to implement, such as a shop to upgrade items and infinite scaling
+on the game difficulty, but overall I'm pretty happy with the final product. 
 

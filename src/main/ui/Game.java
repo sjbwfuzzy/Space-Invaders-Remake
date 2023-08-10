@@ -53,19 +53,16 @@ public class Game implements Writable {
         keysPressed = new HashSet<>();
         items = new ArrayList<>();
         enemies = new ArrayList<>();
-        setUp();
-    }
-
-    // MODIFIES: this
-    // EFFECTS:  clears list of bullets and enemies, initializes player
-    private void setUp() {
-        enemies.clear();
-        enemyBullets.clear();
         isGameOver = false;
         invading = false;
         movementUnits = 1;
         score = 0;
+        setUpPlayer();
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes player
+    private void setUpPlayer() {
         ArrayList<Integer> stats = new ArrayList<>(4);
         stats.add(10); //max health
         stats.add(1); //bonus attack

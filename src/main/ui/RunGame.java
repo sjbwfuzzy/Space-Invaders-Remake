@@ -16,7 +16,7 @@ public class RunGame extends JFrame {
     private GamePanel gp;
     private InfoPanel ip;
     private StatPanel sp;
-    private InteractivePanel bp;
+    private InteractivePanel interactivePanel;
 
     // EFFECTS: sets up window in which game will be played
     public RunGame() {
@@ -28,11 +28,11 @@ public class RunGame extends JFrame {
         gp = new GamePanel(game);
         ip = new InfoPanel(game);
         sp = new StatPanel(game);
-        bp = new InteractivePanel(game);
+        interactivePanel = new InteractivePanel(game);
         add(gp);
         add(ip, BorderLayout.NORTH);
         add(sp, BorderLayout.SOUTH);
-        add(bp, BorderLayout.EAST);
+        add(interactivePanel, BorderLayout.EAST);
         addKeyListener(new KeyHandler());
         addWindowListener(new WindowHandler());
         pack();
@@ -52,7 +52,7 @@ public class RunGame extends JFrame {
                 gp.repaint();
                 ip.update();
                 sp.update();
-                bp.update();
+                interactivePanel.update();
             }
         });
         t.start();
